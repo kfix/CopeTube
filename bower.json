@@ -1,0 +1,25 @@
+{
+  "name": "CopeTube",
+  "version": "1.0",
+  "authors": [
+    "Joey Korkames"
+  ],
+  "description": "Interactively design precise tube-notching templates.",
+  "keywords": [
+    "react",
+    "metal-fabrication",
+    "industrial-design"
+  ],
+  "license": "GPLv3",
+  "homepage": "http://github.com/kfix/CopeTube",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.13.1"
+  }
+}

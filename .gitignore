@@ -1,0 +1,4 @@
+*.app/
+build/
+es6/*.js
+es6/*.js.map
