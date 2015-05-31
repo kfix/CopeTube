@@ -25,8 +25,10 @@ class HelloMessage extends React.Component {
 	}
 }
 
-//non-dynamic svg's should use;
-// https://github.com/matthewwithanm/react-inlinesvg
+// static svg's should use https://github.com/matthewwithanm/react-inlinesvg https://www.npmjs.com/package/react-inlinesvg
+// react's svg support is spotty: https://github.com/facebook/react/labels/SVG
+// texts/tspans need to be marked up with fully-interpolated-strings: https://github.com/facebook/react/issues/1236 https://github.com/facebook/react/pull/3351
+//  https://github.com/facebook/react/blob/master/src/renderers/dom/shared/ReactDOMTextComponent.js#L90
 
 class MiterTemplate extends React.Component {
 	constructor(props) {
@@ -35,16 +37,25 @@ class MiterTemplate extends React.Component {
 		var angle = new Angle(props.angle);
 		var cutTube = new TubeProfile(props.cutOD, 0, 0);
 		var joinTube = new TubeProfile(props.joinOD, 0, 0);
-		var joint = new CopedJoint(cutTube, joinTube, props.angle, props.offset);
-		//var [width, height] = joint.plot_cope() // plot_cope is not an iterable, cant destructure it
-		//var width = joint.plot_cope()[0];
-		//var height = joint.plot_cope()[1];
-		var width = joint.plot_max - joint.plot_min;
-		var height = cutTube.circumference;
-		var path = joint.plot_cope((r, x, y) => r.push(`${x},${y}`));
-		console.log(path);
+		var joint = new CopedJoint(cutTube, joinTube, angle, props.offset);
+
+		var [width, height] = [...joint.cope_plot_size()];
+		//var width = joint.plot_max - joint.plot_min;
+		//var height = cutTube.circumference;
+		//console.log(`width: ${width}`);
+		//console.log(`height: ${height}`);
+
+		var path = [...joint.gen_cope_plot()]; //true to invert
+		//path.push([0, height]);
+		//var path = [...joint.gen_cope_plot(false, 0.5)]; //just 13 points for testing
+		//console.log(path);
+
 		this.state = {
-			date: `DateTime.now.strftime('%-m/%-d/%Y @%R')`,
+			angle,
+			cutTube,
+			joinTube,
+			joint,
+			date: new Date(), //`DateTime.now.strftime('%-m/%-d/%Y @%R')`,
 			leadingAngle: angle.complementaries[0],
 			trailingAngle: angle.complementaries[1],
 			pathWidth: width,
@@ -54,68 +65,57 @@ class MiterTemplate extends React.Component {
 	}
 	render() {
 		return <svg width={this.props.width + this.props.units} height={this.props.height + this.props.units}>
-			<title>CopeTube {this.state.date}</title>
+			<title>CopeTube {this.state.date.toLocaleString()}</title>
 			<desc></desc>
-			<metadata>
-			</metadata>
-			<svg id="cope_vbox" x={this.props.fromLeft + this.props.units} y={this.props.fromTop + this.props.units}
-				width={this.state.pathWidth + this.props.units}
-				height={this.state.pathHeight + this.props.units}
-				viewBox={`0 0 ${this.state.pathWidth} ${this.state.pathHeight}`}>
-				<polygon id="cope"
-					points={`${this.state.pathPoints.join(' ')}	0,${this.state.pathHeight}`} />
-				<rect id="cope_bbox" stroke="green" stroke-width="0.02" fill="none" height="100%" width="100%" />
+			<metadata></metadata>
+			<svg id="cope_vbox" x={this.props.fromLeft + this.props.units} y={this.props.fromTop + this.props.units} width={this.state.pathWidth + this.props.units} height={this.state.pathHeight + this.props.units} viewBox={`0 0 ${this.state.pathWidth} ${this.state.pathHeight}`}>
+				<polygon id="cope" points={`0,0 ${this.state.pathPoints.join(' ')} 0,${this.state.pathHeight}`} />
+				<rect id="cope_bbox" stroke="green" strokeWidth="0.02" fill="none" height="100%" width="100%" />
 			</svg>
-			<svg id="guides" y={this.props.fromTop + this.props.units}
-				width={(this.props.fromLeft + this.state.pathWidth) + this.props.units}
-				height={this.state.pathHeight + this.props.units}>
+			<svg id="guides" y={this.props.fromTop + this.props.units} width={(this.props.fromLeft + this.state.pathWidth) + this.props.units} height={this.state.pathHeight + this.props.units}>
 				<line x1="0%" y1="0%" x2="100%" y2="0%" />
 				<line x1="0%" y1="25%" x2="100%" y2="25%" />
 				<line x1="0%" y1="50%" x2="100%" y2="50%" />
 				<line x1="0%" y1="75%" x2="100%" y2="75%" />
 				<line x1="0%" y1="100%" x2="100%" y2="100%" />
 			</svg>
-			<svg id="titles"
-				y={this.state.fromTop + this.props.units}
-				width={this.props.fromLeft + this.props.units}
-				height={this.state.pathHeight + this.props.units}>
+			<svg id="titles" y={this.props.fromTop + this.props.units} width={this.props.fromLeft + this.props.units} height={this.state.pathHeight + this.props.units}>
 				<text x="100%" y="0%">
 					<tspan dy="-2px">{this.state.pathWidth}</tspan>
-					<tspan id="ctc_ds" x="0%" dy="8pt">ds &bull;</tspan>
-							<tspan class="emoji" id="ctc_ds" x="0%" dy="8pt">&bikeji;</tspan>
-							<tspan class="wingding" id="ctc_ds" x="0%" dy="8pt">&bikeding;</tspan>
+					<tspan id="ctc_ds" x="0%" dy="8pt">ds •</tspan>
+					<tspan className="emoji" id="ctc_ds" x="0%" dy="8pt">🚲🚴</tspan>
+					<tspan className="wingding" id="ctc_ds" x="0%" dy="8pt"></tspan>
 				</text>
-
 				<text x="0%" y="25%">
-					<tspan dy="-1pt">&ang;{this.state.leadingAngle}&deg;</tspan>
+					<tspan dy="-1pt">{`∠${this.state.leadingAngle.degrees}°`}</tspan>
 					<tspan id="mtm_t" x="0%" dy="8pt">top</tspan>
 				</text>
 
-				<text id="join_od" x="115%" y="50%">&#8592;&dia;{this.props.joinOD}&inch;&#8594;</text>
-				<text x="0%" y="50%">&delta;{this.props.angle}&deg;</text>
+				<text id="join_od" x="115%" y="50%">{`←⌀${this.props.joinOD}″→`}</text>
+				<text x="0%" y="50%">{`𝚫${this.props.angle}°`}</text>
 
-				<svg class="flipped" x="0%" y="50%">
+				<svg className="flipped" x="0%" y="50%">
 					<text>
 						<tspan id="ctc_nds" x="0%" dy="8pt">nds</tspan>
-						<tspan class="wingding" id="ctc_nds" x="0%" dy="8pt">&bikeding;</tspan>
+						<tspan className="wingding" id="ctc_nds" x="0%" dy="8pt"></tspan>
 					</text>
 					<text x="0%" y="-25%">
-						<tspan dy="-1pt">&ang;{this.state.trailingAngle}&deg;</tspan>
+						<tspan dy="-1pt">{`∠${this.state.trailingAngle.degrees}°`}</tspan>
 						<tspan id="mtm_b" x="0%" dy="8pt">bottom</tspan>
 					</text>
 					<text x="0%" y="-50%">
-						<tspan id="cut_od" dy="-1pt">&#8596;&dia;{this.props.cutOD}&inch;</tspan>
+						<tspan id="cut_od" dy="-1pt">{`⟷⌀${this.props.cutOD}″`}</tspan>
 						<tspan id="ctc_ds" x="0%" dy="8pt"></tspan>
 					</text>
 				</svg>
 			</svg>
-			<svg id="tab" x="0.3in" y="3.242in" width="0.676in" height="18pt">
-				<tspan x="1px" dy="7pt">&lt;0.676&gt;</tspan>
+			<svg id="tab" x={this.props.fromLeft + this.props.units} y={(this.props.fromTop + this.state.pathHeight) + this.props.units} width={this.state.pathWidth + this.props.units} height="18pt">
+				<tspan x="1px" dy="7pt">{`《${this.state.pathWidth}》`}</tspan>
 				<rect id="tabcut" height="100%" width="100%" />
 				<text id="tile_strip" x="1px" y="6pt">
-					<tspan>&#x2702;0.676&#x2704;</tspan>
-					<tspan id="ctc_ds" x="0%" dy="6pt">5/9/2015</tspan>
-					<tspan id="ctc_ds" x="0%" dy="6pt">@12:42</tspan>
+					<tspan>{`✂︎${this.state.pathWidth}✂︎`}</tspan>
+					<tspan id="ctc_ds" x="0%" dy="6pt">{this.state.date.toLocaleDateString()}</tspan>
+					<tspan id="ctc_ds" x="0%" dy="6pt">{this.state.date.toLocaleTimeString()}</tspan>
 				</text>
 			</svg>
 		</svg>;
@@ -143,11 +143,13 @@ var TOP_MARGIN = 0.1; //barely enough height to fully print a flattened a 1-in c
 //var LEFT_MARGIN = 0.5; //in from left
 //var TOP_MARGIN = 0.5; //in from top
 
-var ctrls = document.getElementById('controls'),
-	miter = document.getElementById('profile');
+var ctrlsEl = document.getElementById('controls'),
+	miterEl = document.getElementById('profile');
 
 
-React.render(<HelloMessage name="CopeTube controls" />, ctrls);
+React.render(<HelloMessage name="CopeTube controls" />, ctrlsEl);
+// make a rendering of the two tubes' junction
+//  allow touch-dragging, rotating and pinching to reorient and resize the tubes
 
 var miterOpts = {
 	joinOD: 1,
@@ -159,5 +161,7 @@ var miterOpts = {
 	height: PAPER_HEIGHT,
 	fromLeft: LEFT_MARGIN,
 	fromTop: TOP_MARGIN
-}
-React.render(<MiterTemplate {...miterOpts} />, miter);
+};
+//var miterObj = new MiterTemplate(miterOpts); // debug
+
+React.render(<MiterTemplate {...miterOpts} />, miterEl);

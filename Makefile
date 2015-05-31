@@ -18,15 +18,18 @@ deps:
 	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
-browser/%: .babel/es6 icon.png macpin.js js/ html/ bower_components/
+browser/%: .babel/ icon.png macpin.js js/ html/ bower_components/
 	install -d $@
 	for i in .babel/* icon.png macpin.js js/* bower_components/ html/*; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 
-.babel/%/: %/
+.babel: es6
 	babel $< --out-dir $@ --source-maps --source-maps-inline
 
 test: browser/$(REPO)
 	open $</index.html
+
+test.chrome: browser/$(REPO)
+	open -a "Google Chrome.app" $</index.html
 
 test.app: $(REPO).app
 	open $<
@@ -61,5 +64,5 @@ release:
 	@exit 1
 endif
 
-.PRECIOUS: build/% .babel/es6/
-.PHONY: clean all
+.PRECIOUS: build/% .babel/%
+.PHONY: clean all test test.app test.chrome

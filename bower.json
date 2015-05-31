@@ -20,6 +20,7 @@
     "tests"
   ],
   "dependencies": {
-    "react": "~0.13.1"
+    "react": "~0.13.3",
+    "babel-polyfill": "~0.0.1"
   }
 }
