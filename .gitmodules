@@ -1,0 +1,4 @@
+[submodule "dist/gh-pages"]
+	path = dist/gh-pages
+	url = https://github.com/kfix/CopeTube.git
+	branch = gh-pages
