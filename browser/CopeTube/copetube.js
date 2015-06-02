@@ -1,1 +1,0 @@
-../../.babel/copetube.js
