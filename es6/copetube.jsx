@@ -132,9 +132,15 @@ class MiterTemplate extends React.Component {
 // make a rendering of the two tubes' junction
 //  allow touch-dragging, rotating and pinching to reorient and resize the tubes
 
+function ReactLink(value, requestChange) {
+	this.value = value;
+	this.requestChange = requestChange;
+}
+
 class CopeTubeApp extends React.Component {
 	constructor() {
 		super();
+		//this.linkState = this.linkState.bind(this);
 		this.state = {
 			miter: {
 				joinOD: 1,
@@ -152,13 +158,16 @@ class CopeTubeApp extends React.Component {
 		};
 	}
 
-	handleChange(key) {
-		return function(e) {
-			//console.log(`${key} = ${e.target.value}`)
-			var state = {miter: this.state.miter};
-			state.miter[key] = e.target.value;
-			this.setState(state);
-		}.bind(this);
+	linkSubState(key, subkey) {
+  		return new ReactLink(
+			this.state[key][subkey],
+			(newValue) => {
+				var newState = {};
+				newState[key] = this.state[key];
+				newState[key][subkey] = newValue;
+				this.setState(newState);
+			}
+		);
 	}
 
 	render() {
@@ -166,11 +175,12 @@ class CopeTubeApp extends React.Component {
 			<div>
 				<MiterTemplate {...this.state.miter} /><br />
 				<form>
-					joinOD<input type="number" onChange={this.handleChange('joinOD')} value={this.state.miter.joinOD}/><br />
-					cutOD<input type="number" onChange={this.handleChange('cutOD')} value={this.state.miter.cutOD}/><br />
-					angle<input type="number" onChange={this.handleChange('angle')} value={this.state.miter.angle}/><br />
-					offset<input type="number" onChange={this.handleChange('offset')} value={this.state.miter.offset}/><br />
-					units<select onChange={this.handleChange('units')} value={this.state.miter.units}>
+					joinOD<input type="number" valueLink={this.linkSubState('miter','joinOD')} /><br />
+					cutOD<input type="number" valueLink={this.linkSubState('miter', 'cutOD')} /><br />
+					angle<input type="number" valueLink={this.linkSubState('miter', 'angle')} /><br />
+					offset<input type="number" valueLink={this.linkSubState('miter', 'offset')} /><br />
+					units<input type="number" valueLink={this.linkSubState('miter', 'units')} /><br />
+					units<select valueLink={this.linkSubState('miter','units')}>
 						<option value="in">Inches</option>
 						<option value="mm">Millimeters</option>
 					</select>
