@@ -18,12 +18,19 @@ deps:
 	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
-browser/%: .babel/ icon.png macpin.js js/ html/ bower_components/
+browser/%: .babel icon.png macpin.js js/ html/ bower_components/
 	install -d $@
 	for i in .babel/* icon.png macpin.js js/* bower_components/ html/*; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 
 .babel: es6
 	babel $< --out-dir $@ --source-maps --source-maps-inline
+
+gh-pages: browser/$(REPO)
+	cp -RL $</* dist/$@
+	cd dist/$@; git add *; git commit; git push origin/$@
+	git add dist/$@
+	git commit
+	git push
 
 test: browser/$(REPO)
 	open $</index.html
