@@ -1,0 +1,27 @@
+{
+	"short_name": "CopeTube",
+	"name": "CopeTube",
+	"icons": [
+		{
+			"src": "icon96.png",
+			"sizes": "96x96",
+			"type": "image/png",
+			"density": "2.0"
+		},
+		{
+			"src": "icon144.png",
+			"sizes": "144x144",
+			"type": "image/png",
+			"density": "3.0"
+		},
+		{
+			"src": "icon192.png",
+			"sizes": "192x192",
+			"type": "image/png",
+			"density": "4.0"
+		}
+	],
+	"start_url": "/index.html",
+	"display": "standalone",
+	"orientation": "portrait"
+}

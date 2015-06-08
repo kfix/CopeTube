@@ -1,28 +1,31 @@
 @font-face {
-	font-family: 'Symbola';
-	src: local('Symbola');
-	src: url('Symbola.ttf');
+	font-family: Symbola;
+	src: local(Symbola);
+	src: url(Symbola.ttf);
 }
 
 @font-face {
-	font-family: 'Y-14.5M-2009';
-	src: local('Y-14.5M-2009');
-	src: url('Y-14.5M-2009.ttf');
+	font-family: Y14M;
+	src: local(Y14.5M-2009);
+	src: url(Y14.5M-2009.ttf);
 }
 
+#CopeTubeApp { columns: 2; -webkit-columns: 2; }
+#template { column-span: 1; }
 svg { overflow: visible; }
-#template { border: 1px solid red; }
+#miterTemplate { border: 1px solid red; }
 /* .emoji { font-family: Symbola,"Open Sans Emoji","Apple Color Emoji","Android Emoji","Segoe UI Emoji"; } */
 /* https://github.com/MorbZ/OpenSansEmoji */
 /* no support for 32-bit rgb *Emoji fonts in PhantomJS yet, see:
 	https://code.google.com/p/chromium/issues/detail?id=62435 */
 .wingding { font-family: webdings; }
 /* text { font-family: futura; font-style: italic; font-variant: small-caps; } */
-text { font-family: "Y14.5M-2009",osifont; }
+text { font-family: Y14M,osifont; }
 	/* http://www.fontspace.com/micronus/y145m-2009 */
 	/* https://code.google.com/p/osifont/ */
 #cope_vbox { margin-left: 0; margin-top: 0; }
-#cope { stroke: black; fill: lightblue; stroke-width: 0.001; } /* stroke-width in in x/y units, not px! */
+#cope { stroke: black; fill: lightblue; vector-effect: non-scaling-stroke; stroke-width: 1px; }
+#cope_bbox { stroke: green; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
 #guides { margin-top: 0; }
 #titles { fill: purple; font-size: 8pt; }
 #join_od { writing-mode: tb; text-anchor: middle; }
@@ -38,3 +41,5 @@ flip { display: inline-block; -webkit-transform: scale(-1,-1); }
 .flipped text { text-anchor: end; -webkit-transform: scale(-1,-1); }
 */
 .flipped text { text-anchor: end; -webkit-transform-origin: center center; -webkit-transform: rotate(180deg); }
+
+#controls: { column-span: 1; }
