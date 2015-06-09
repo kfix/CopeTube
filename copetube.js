@@ -1,3 +1,5 @@
+/* eslint-env es6 */
+
 "use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -27,18 +29,32 @@ var UNITS = {
 
 var LAYOUTS = {
 	"dymo-sticky-address": {
-		units: "in",
-		width: 1.125,
-		height: 3.5,
-		fromLeft: 0.3,
-		fromTop: 0.1
+		"in": {
+			width: 1.125,
+			height: 3.5,
+			fromLeft: 0.3,
+			fromTop: 0.1
+		},
+		"mm": {
+			width: 28.575,
+			height: 88.9,
+			fromLeft: 7.62,
+			fromTop: 2.54
+		}
 	},
 	"letter": {
-		units: "in",
-		width: 8.5,
-		height: 11,
-		fromLeft: 0.5,
-		fromTop: 0.5
+		"in": {
+			width: 8.5,
+			height: 11,
+			fromLeft: 0.5,
+			fromTop: 0.5
+		},
+		"mm": {
+			width: 215.9,
+			height: 279.4,
+			fromLeft: 12.7,
+			fromTop: 12.7
+		}
 	}
 };
 
@@ -144,8 +160,8 @@ var MiterTemplate = (function (_React$Component2) {
 				React.createElement(
 					"svg",
 					{ id: "cope_vbox", x: this.props.fromLeft + this.props.units, y: this.props.fromTop + this.props.units, width: pathWidth + this.props.units, height: pathHeight + this.props.units, viewBox: "0 0 " + pathWidth + " " + pathHeight },
-					React.createElement("polygon", { id: "cope", points: "0,0 " + path.join(" ") + " 0," + pathHeight }),
-					React.createElement("rect", { id: "cope_bbox", height: "100%", width: "100%" })
+					React.createElement("rect", { id: "cope_bbox", style: { fill: this.props.cutColor }, height: "100%", width: "100%" }),
+					React.createElement("polygon", { id: "cope", style: { fill: this.props.keepColor }, points: "0,0 " + path.join(" ") + " 0," + pathHeight })
 				),
 				React.createElement(
 					"svg",
@@ -200,7 +216,7 @@ var MiterTemplate = (function (_React$Component2) {
 					React.createElement(
 						"text",
 						{ x: "0%", y: "50%" },
-						"𝚫" + angle.degrees + "°"
+						"Δ" + angle.degrees + "°"
 					),
 					React.createElement(
 						"svg",
@@ -295,7 +311,6 @@ var CopeTubeApp = (function (_React$Component3) {
 		_classCallCheck(this, CopeTubeApp);
 
 		_get(Object.getPrototypeOf(CopeTubeApp.prototype), "constructor", this).call(this);
-		//this.linkState = this.linkState.bind(this);
 		this.state = {
 			miter: {
 				joinOD: 1,
@@ -305,34 +320,74 @@ var CopeTubeApp = (function (_React$Component3) {
 				southpaw: false
 			},
 			layout: "dymo-sticky-address",
-			units: "in"
+			units: "in",
+			cutColor: "lightblue",
+			keepColor: "white"
 		};
+		this.state = Object.assign(this.state, LAYOUTS[this.state.layout][this.state.units], UNITS[this.state.units]);
 	}
 
 	_inherits(CopeTubeApp, _React$Component3);
 
 	_createClass(CopeTubeApp, [{
-		key: "linkSubState",
-		value: function linkSubState(key, subkey) {
+		key: "linkState",
+		value: function linkState(key) {
 			var _this2 = this;
 
-			return new ReactLink(this.state[key][subkey], function (newValue) {
+			return new ReactLink(this.state[key], function (newValue) {
 				var newState = {};
-				newState[key] = _this2.state[key];
-				newState[key][subkey] = newValue;
+				newState[key] = newValue;
 				_this2.setState(newState);
 			});
 		}
 	}, {
+		key: "linkSubState",
+		value: function linkSubState(key, subkey) {
+			var _this3 = this;
+
+			return new ReactLink(this.state[key][subkey], function (newValue) {
+				var newState = {};
+				newState[key] = _this3.state[key];
+				newState[key][subkey] = newValue;
+				_this3.setState(newState);
+			});
+		}
+	}, {
+		key: "printTemplate",
+		value: function printTemplate(event) {
+			document.getElementById("controls").hidden = true;
+			window.print();
+			document.getElementById("controls").hidden = false;
+		}
+	}, {
+		key: "swapUnits",
+		value: function swapUnits(to) {
+			if (to !== this.state.units) switch (to) {
+				case "mm":
+					this.state.miter.joinOD *= 25.4;
+					this.state.miter.cutOD *= 25.4;
+					break;
+				case "in":
+					this.state.miter.joinOD /= 25.4;
+					this.state.miter.cutOD /= 25.4;
+					break;
+			};
+		}
+	}, {
 		key: "render",
 		value: function render() {
+			var _this4 = this;
+
+			var unitLink = this.linkState("units");
 			return React.createElement(
 				"div",
 				{ id: "CopeTubeApp" },
 				React.createElement(
 					"div",
 					{ id: "template" },
-					React.createElement(MiterTemplate, _extends({}, this.state.miter, LAYOUTS[this.state.layout], UNITS[this.state.units]))
+					React.createElement(MiterTemplate, _extends({}, this.state.miter, LAYOUTS[this.state.layout][this.state.units], UNITS[this.state.units], {
+						units: this.state.units, layout: this.state.layout, cutColor: this.state.cutColor, keepColor: this.state.keepColor
+					}))
 				),
 				React.createElement(
 					"div",
@@ -340,40 +395,75 @@ var CopeTubeApp = (function (_React$Component3) {
 					React.createElement(
 						"form",
 						null,
-						"joinOD",
+						React.createElement(
+							"label",
+							null,
+							"join ⌀"
+						),
 						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "joinOD") }),
 						React.createElement("br", null),
-						"cutOD",
+						React.createElement(
+							"label",
+							null,
+							"cut ⌀"
+						),
 						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "cutOD") }),
 						React.createElement("br", null),
-						"angle",
+						React.createElement(
+							"label",
+							null,
+							"±angle⟂"
+						),
 						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "angle") }),
 						React.createElement("br", null),
-						React.createElement("input", { type: "range", min: "0", max: "44", step: "1", valueLink: this.linkSubState("miter", "angle") }),
-						React.createElement("br", null),
-						"offset",
-						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "offset") }),
-						React.createElement("br", null),
-						"southpaw",
-						React.createElement("input", { type: "checkbox", checkedLink: this.linkSubState("miter", "southpaw") }),
-						React.createElement("br", null),
-						"units",
 						React.createElement(
-							"select",
-							{ valueLink: this.linkSubState("miter", "units") },
-							Object.keys(UNITS).map(function (k) {
-								return React.createElement(
-									"option",
-									{ key: k, value: k },
-									UNITS[k].unitName
-								);
-							})
+							"label",
+							null,
+							"⟂"
+						),
+						React.createElement("input", { type: "range", min: 1, max: 44, step: 0.5, valueLink: this.linkSubState("miter", "angle") }),
+						React.createElement(
+							"output",
+							null,
+							"± ",
+							this.state.miter.angle,
+							"°"
 						),
 						React.createElement("br", null),
-						"layout",
+						React.createElement(
+							"label",
+							null,
+							"offset"
+						),
+						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "offset") }),
+						React.createElement("br", null),
+						React.createElement(
+							"label",
+							null,
+							"southpaw"
+						),
+						React.createElement("input", { type: "checkbox", checkedLink: this.linkSubState("miter", "southpaw") }),
+						React.createElement("br", null),
+						Object.keys(UNITS).map(function (k) {
+							return React.createElement("input", { type: "radio", name: "units", key: k, defaultChecked: _this4.state.units === k, onChange: function (target) {
+									unitLink.requestChange(k);
+									_this4.swapUnits(k);
+								} });
+						}),
+						React.createElement(
+							"label",
+							null,
+							this.state.units
+						),
+						React.createElement("br", null),
+						React.createElement(
+							"label",
+							null,
+							"layout"
+						),
 						React.createElement(
 							"select",
-							{ valueLink: this.linkSubState("miter", "layout") },
+							{ valueLink: this.linkState("layout") },
 							Object.keys(LAYOUTS).map(function (k) {
 								return React.createElement(
 									"option",
@@ -381,7 +471,15 @@ var CopeTubeApp = (function (_React$Component3) {
 									k
 								);
 							})
-						)
+						),
+						React.createElement("br", null),
+						React.createElement("input", { type: "color", valueLink: this.linkState("cutColor") }),
+						React.createElement("input", { type: "color", valueLink: this.linkState("keepColor") })
+					),
+					React.createElement(
+						"button",
+						{ id: "print", onClick: this.printTemplate },
+						"Print"
 					)
 				)
 			);
@@ -392,5 +490,7 @@ var CopeTubeApp = (function (_React$Component3) {
 })(React.Component);
 
 React.render(React.createElement(CopeTubeApp, null), document.body);
-/* print button that hides form */
+/* <label>units</label><select valueLink={this.linkState('units')}>
+{ Object.keys(UNITS).map((k) => <option key={k} value={k}>{UNITS[k].unitName}</option>) }
+</select> */
 //# sourceMappingURL=/Users/kfix/src/CopeTube/.babel/copetube.js.map

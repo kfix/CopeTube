@@ -52,7 +52,7 @@ var Angle = (function () {
 	function Angle(degrees) {
 		_classCallCheck(this, Angle);
 
-		this.degrees = degrees;
+		this.degrees = new Number(degrees);
 		//this.radians = TWOPI * this.degrees / 360.0;
 		//this.sine = Math.sinh(this.radians);
 		//this.cosine = Math.cosh(this.radians);
@@ -108,9 +108,9 @@ var TubeProfile = (function () {
 
 		_classCallCheck(this, TubeProfile);
 
-		this.diameter = diameter; //outermost XY-XY extent
-		this.faces = faces;
-		this.gauge = gauge;
+		this.diameter = new Number(diameter); //outermost XY-XY extent
+		this.faces = new Number(faces);
+		this.gauge = new Number(gauge);
 	}
 
 	_createClass(TubeProfile, [{
@@ -211,7 +211,7 @@ var CopedJoint = (function () {
 		this.cut_tube = cut_tube;
 		this.join_tube = join_tube;
 		this.angle = angle;
-		this.offset = offset;
+		this.offset = new Number(offset);
 	}
 
 	_createClass(CopedJoint, [{
