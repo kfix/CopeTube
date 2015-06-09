@@ -108,16 +108,37 @@ var ExampleComponent = (function (_BaseComponent) {
 // texts/tspans need to be marked up with fully-interpolated-strings: https://github.com/facebook/react/issues/1236 https://github.com/facebook/react/pull/3351
 //  https://github.com/facebook/react/blob/master/src/renderers/dom/shared/ReactDOMTextComponent.js#L90
 
-var MiterTemplate = (function (_React$Component2) {
-	function MiterTemplate() {
-		_classCallCheck(this, MiterTemplate);
+var JointModel = (function (_React$Component2) {
+	function JointModel() {
+		_classCallCheck(this, JointModel);
 
 		if (_React$Component2 != null) {
 			_React$Component2.apply(this, arguments);
 		}
 	}
 
-	_inherits(MiterTemplate, _React$Component2);
+	_inherits(JointModel, _React$Component2);
+
+	_createClass(JointModel, [{
+		key: "render",
+		value: function render() {
+			return React.createElement("br", null);
+		}
+	}]);
+
+	return JointModel;
+})(React.Component);
+
+var MiterTemplate = (function (_React$Component3) {
+	function MiterTemplate() {
+		_classCallCheck(this, MiterTemplate);
+
+		if (_React$Component3 != null) {
+			_React$Component3.apply(this, arguments);
+		}
+	}
+
+	_inherits(MiterTemplate, _React$Component3);
 
 	_createClass(MiterTemplate, [{
 		key: "render",
@@ -148,7 +169,7 @@ var MiterTemplate = (function (_React$Component2) {
 
 			return React.createElement(
 				"svg",
-				{ id: "miterTemplate", width: this.props.width + this.props.units, height: this.props.height + this.props.units },
+				{ className: "miterTemplate", width: this.props.width + this.props.units, height: this.props.height + this.props.units },
 				React.createElement(
 					"title",
 					null,
@@ -159,13 +180,13 @@ var MiterTemplate = (function (_React$Component2) {
 				React.createElement("metadata", null),
 				React.createElement(
 					"svg",
-					{ id: "cope_vbox", x: this.props.fromLeft + this.props.units, y: this.props.fromTop + this.props.units, width: pathWidth + this.props.units, height: pathHeight + this.props.units, viewBox: "0 0 " + pathWidth + " " + pathHeight },
-					React.createElement("rect", { id: "cope_bbox", style: { fill: this.props.cutColor }, height: "100%", width: "100%" }),
-					React.createElement("polygon", { id: "cope", style: { fill: this.props.keepColor }, points: "0,0 " + path.join(" ") + " 0," + pathHeight })
+					{ className: "cope_vbox", x: this.props.fromLeft + this.props.units, y: this.props.fromTop + this.props.units, width: pathWidth + this.props.units, height: pathHeight + this.props.units, viewBox: "0 0 " + pathWidth + " " + pathHeight },
+					React.createElement("rect", { className: "cope_bbox", style: { fill: this.props.cutColor }, height: "100%", width: "100%" }),
+					React.createElement("polygon", { className: "cope", style: { fill: this.props.keepColor }, points: "0,0 " + path.join(" ") + " 0," + pathHeight })
 				),
 				React.createElement(
 					"svg",
-					{ id: "guides", y: this.props.fromTop + this.props.units, width: this.props.fromLeft + pathWidth + this.props.units, height: pathHeight + this.props.units },
+					{ className: "guides", y: this.props.fromTop + this.props.units, width: this.props.fromLeft + pathWidth + this.props.units, height: pathHeight + this.props.units },
 					React.createElement("line", { x1: "0%", y1: "0%", x2: "100%", y2: "0%" }),
 					React.createElement("line", { x1: "0%", y1: "25%", x2: "100%", y2: "25%" }),
 					React.createElement("line", { x1: "0%", y1: "50%", x2: "100%", y2: "50%" }),
@@ -174,7 +195,7 @@ var MiterTemplate = (function (_React$Component2) {
 				),
 				React.createElement(
 					"svg",
-					{ id: "titles", y: this.props.fromTop + this.props.units, width: this.props.fromLeft + this.props.units, height: pathHeight + this.props.units },
+					{ className: "titles", y: this.props.fromTop + this.props.units, width: this.props.fromLeft + this.props.units, height: pathHeight + this.props.units },
 					React.createElement(
 						"text",
 						{ x: "100%", y: "0%" },
@@ -185,7 +206,7 @@ var MiterTemplate = (function (_React$Component2) {
 						),
 						React.createElement(
 							"tspan",
-							{ id: "ctc_ds", x: "0%", dy: "8pt" },
+							{ className: "ctc_ds", x: "0%", dy: "8pt" },
 							"ds"
 						),
 						React.createElement(
@@ -200,23 +221,23 @@ var MiterTemplate = (function (_React$Component2) {
 						React.createElement(
 							"tspan",
 							{ dy: "-1pt" },
-							"∠" + leadingAngle.degrees + "°"
+							"⦦" + leadingAngle.degrees + "°"
 						),
 						React.createElement(
 							"tspan",
-							{ id: "mtm_t", x: "0%", dy: "8pt" },
-							"leading"
+							{ className: "mtm_t", x: "0%", dy: "8pt" },
+							this.props.joinTitle
 						)
 					),
 					React.createElement(
 						"text",
-						{ id: "join_od", x: "115%", y: "50%" },
+						{ className: "join_od", x: "115%", y: "50%" },
 						"←⌀" + this.props.joinOD + "" + this.props.unitSymbol + "→"
 					),
 					React.createElement(
 						"text",
 						{ x: "0%", y: "50%" },
-						"Δ" + angle.degrees + "°"
+						"⟀" + angle.degrees + "°"
 					),
 					React.createElement(
 						"svg",
@@ -226,7 +247,7 @@ var MiterTemplate = (function (_React$Component2) {
 							null,
 							React.createElement(
 								"tspan",
-								{ id: "ctc_nds", x: "0%", dy: "8pt" },
+								{ className: "ctc_nds", x: "0%", dy: "8pt" },
 								"nds"
 							),
 							React.createElement(
@@ -241,12 +262,12 @@ var MiterTemplate = (function (_React$Component2) {
 							React.createElement(
 								"tspan",
 								{ dy: "-1pt" },
-								"∠" + trailingAngle.degrees + "°"
+								"⦣⦢" + trailingAngle.degrees + "°"
 							),
 							React.createElement(
 								"tspan",
-								{ id: "mtm_b", x: "0%", dy: "8pt" },
-								"trailing"
+								{ className: "mtm_b", x: "0%", dy: "8pt" },
+								this.props.cutTitle
 							)
 						),
 						React.createElement(
@@ -254,25 +275,25 @@ var MiterTemplate = (function (_React$Component2) {
 							{ x: "0%", y: "-50%" },
 							React.createElement(
 								"tspan",
-								{ id: "cut_od", dy: "-1pt" },
+								{ className: "cut_od", dy: "-1pt" },
 								"⟷⌀" + this.props.cutOD + "" + this.props.unitSymbol
 							),
-							React.createElement("tspan", { id: "ctc_ds", x: "0%", dy: "8pt" })
+							React.createElement("tspan", { className: "ctc_ds", x: "0%", dy: "8pt" })
 						)
 					)
 				),
 				React.createElement(
 					"svg",
-					{ id: "tab", x: this.props.fromLeft + this.props.units, y: this.props.fromTop + pathHeight + this.props.units, width: pathWidth + this.props.units, height: "18pt" },
+					{ className: "tab", x: this.props.fromLeft + this.props.units, y: this.props.fromTop + pathHeight + this.props.units, width: pathWidth + this.props.units, height: "18pt" },
 					React.createElement(
 						"tspan",
 						{ x: "1px", dy: "7pt" },
 						"《" + pathWidth.toFixed(2) + "" + this.props.unitSymbol + "》"
 					),
-					React.createElement("rect", { id: "tabcut", height: "100%", width: "100%" }),
+					React.createElement("rect", { className: "tabcut", height: "100%", width: "100%" }),
 					React.createElement(
 						"text",
-						{ id: "tile_strip", x: "1px", y: "6pt" },
+						{ className: "tile_strip", x: "1px", y: "6pt" },
 						React.createElement(
 							"tspan",
 							null,
@@ -280,12 +301,12 @@ var MiterTemplate = (function (_React$Component2) {
 						),
 						React.createElement(
 							"tspan",
-							{ id: "ctc_ds", x: "0%", dy: "6pt" },
+							{ className: "ctc_ds", x: "0%", dy: "6pt" },
 							date.toLocaleDateString()
 						),
 						React.createElement(
 							"tspan",
-							{ id: "ctc_ds", x: "0%", dy: "6pt" },
+							{ className: "ctc_ds", x: "0%", dy: "6pt" },
 							date.toLocaleTimeString()
 						)
 					)
@@ -306,7 +327,7 @@ function ReactLink(value, requestChange) {
 	this.requestChange = requestChange;
 }
 
-var CopeTubeApp = (function (_React$Component3) {
+var CopeTubeApp = (function (_React$Component4) {
 	function CopeTubeApp() {
 		_classCallCheck(this, CopeTubeApp);
 
@@ -314,7 +335,9 @@ var CopeTubeApp = (function (_React$Component3) {
 		this.state = {
 			miter: {
 				joinOD: 1,
+				joinTitle: "SeatTube",
 				cutOD: 1,
+				cutTitle: "TopTube",
 				angle: 17,
 				offset: 0,
 				southpaw: false
@@ -327,7 +350,7 @@ var CopeTubeApp = (function (_React$Component3) {
 		this.state = Object.assign(this.state, LAYOUTS[this.state.layout][this.state.units], UNITS[this.state.units]);
 	}
 
-	_inherits(CopeTubeApp, _React$Component3);
+	_inherits(CopeTubeApp, _React$Component4);
 
 	_createClass(CopeTubeApp, [{
 		key: "linkState",
@@ -366,10 +389,12 @@ var CopeTubeApp = (function (_React$Component3) {
 				case "mm":
 					this.state.miter.joinOD *= 25.4;
 					this.state.miter.cutOD *= 25.4;
+					this.state.miter.offset *= 25.4;
 					break;
 				case "in":
 					this.state.miter.joinOD /= 25.4;
 					this.state.miter.cutOD /= 25.4;
+					this.state.miter.offset /= 25.4;
 					break;
 			};
 		}
@@ -391,42 +416,57 @@ var CopeTubeApp = (function (_React$Component3) {
 				),
 				React.createElement(
 					"div",
+					{ id: "visualization" },
+					React.createElement(JointModel, _extends({}, this.state.miter, LAYOUTS[this.state.layout][this.state.units], UNITS[this.state.units], {
+						units: this.state.units, layout: this.state.layout, cutColor: this.state.cutColor, keepColor: this.state.keepColor
+					}))
+				),
+				React.createElement(
+					"div",
 					{ id: "controls" },
 					React.createElement(
 						"form",
 						null,
+						"⦦",
+						React.createElement("input", { type: "text", valueLink: this.linkSubState("miter", "joinTitle") }),
 						React.createElement(
 							"label",
 							null,
-							"join ⌀"
+							"⌀"
 						),
 						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "joinOD") }),
-						React.createElement("br", null),
 						React.createElement(
 							"label",
 							null,
-							"cut ⌀"
+							UNITS[this.state.units].unitSymbol,
+							"◎"
+						),
+						React.createElement("br", null),
+						"⦣⦢",
+						React.createElement("input", { type: "text", valueLink: this.linkSubState("miter", "cutTitle") }),
+						React.createElement(
+							"label",
+							null,
+							"⌀"
 						),
 						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "cutOD") }),
+						React.createElement(
+							"label",
+							null,
+							UNITS[this.state.units].unitSymbol,
+							"⋎"
+						),
 						React.createElement("br", null),
 						React.createElement(
 							"label",
 							null,
-							"±angle⟂"
+							"⟀"
 						),
-						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "angle") }),
-						React.createElement("br", null),
+						React.createElement("input", { type: "range", min: 0, max: 44, step: 0.5, valueLink: this.linkSubState("miter", "angle") }),
+						React.createElement("input", { type: "number", min: 0, valueLink: this.linkSubState("miter", "angle") }),
 						React.createElement(
 							"label",
 							null,
-							"⟂"
-						),
-						React.createElement("input", { type: "range", min: 1, max: 44, step: 0.5, valueLink: this.linkSubState("miter", "angle") }),
-						React.createElement(
-							"output",
-							null,
-							"± ",
-							this.state.miter.angle,
 							"°"
 						),
 						React.createElement("br", null),
@@ -436,6 +476,11 @@ var CopeTubeApp = (function (_React$Component3) {
 							"offset"
 						),
 						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "offset") }),
+						React.createElement(
+							"label",
+							null,
+							UNITS[this.state.units].unitSymbol
+						),
 						React.createElement("br", null),
 						React.createElement(
 							"label",

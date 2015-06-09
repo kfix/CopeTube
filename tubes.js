@@ -108,9 +108,9 @@ var TubeProfile = (function () {
 
 		_classCallCheck(this, TubeProfile);
 
-		this.diameter = new Number(diameter); //outermost XY-XY extent
-		this.faces = new Number(faces);
-		this.gauge = new Number(gauge);
+		this.diameter = Number(diameter); //outermost XY-XY extent
+		this.faces = Number(faces);
+		this.gauge = Number(gauge);
 	}
 
 	_createClass(TubeProfile, [{
@@ -211,7 +211,7 @@ var CopedJoint = (function () {
 		this.cut_tube = cut_tube;
 		this.join_tube = join_tube;
 		this.angle = angle;
-		this.offset = new Number(offset);
+		this.offset = Number(offset);
 	}
 
 	_createClass(CopedJoint, [{
