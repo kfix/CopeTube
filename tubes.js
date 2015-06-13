@@ -269,8 +269,9 @@ var CopedJoint = (function () {
 	}, {
 		key: "gen_cope_plot",
 		value: regeneratorRuntime.mark(function gen_cope_plot() {
-			var invert = arguments[0] === undefined ? false : arguments[0];
-			var resolution = arguments[1] === undefined ? 0.01 : arguments[1];
+			var hflip = arguments[0] === undefined ? false : arguments[0];
+			var horiz = arguments[1] === undefined ? false : arguments[1];
+			var resolution = arguments[2] === undefined ? 0.01 : arguments[2];
 
 			var plotter, info, _info$value, x, y, d, xcut;
 
@@ -281,7 +282,7 @@ var CopedJoint = (function () {
 
 					case 1:
 						if ((info = plotter.next()).done) {
-							context$2$0.next = 11;
+							context$2$0.next = 16;
 							break;
 						}
 
@@ -290,17 +291,31 @@ var CopedJoint = (function () {
 						y = _info$value[1];
 						d = _info$value[2];
 						xcut = this.develop_coped_point(x, y);
-						context$2$0.next = 9;
-						return [invert ? xcut - this.plot_min : this.plot_max - xcut, d];
 
-					case 9:
+						if (!horiz) {
+							context$2$0.next = 12;
+							break;
+						}
+
+						context$2$0.next = 10;
+						return [d, hflip ? xcut - this.plot_min : this.plot_max - xcut];
+
+					case 10:
+						context$2$0.next = 14;
+						break;
+
+					case 12:
+						context$2$0.next = 14;
+						return [hflip ? xcut - this.plot_min : this.plot_max - xcut, d];
+
+					case 14:
 						context$2$0.next = 1;
 						break;
 
-					case 11:
+					case 16:
 						return context$2$0.abrupt("return", info.value);
 
-					case 12:
+					case 17:
 					case "end":
 						return context$2$0.stop();
 				}
@@ -349,6 +364,7 @@ var CopedJoint = (function () {
 //for (let [x, y, d] = this.cut_tube.gen_edge_plot(resolution)) {
 //get x,y and distance points for the tube's edge path one-at-a-time
 //notch x to fit the join_tube angling into the cut_tube
+//cut-from-left-side || cut-from-right-side (default)
 //cut-from-left-side || cut-from-right-side (default)
 // number of points
 //# sourceMappingURL=/Users/kfix/src/CopeTube/.babel/tubes.js.map

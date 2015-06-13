@@ -96,7 +96,6 @@ var ExampleComponent = (function (_BaseComponent) {
 		_get(Object.getPrototypeOf(ExampleComponent.prototype), "constructor", this).call(this);
 		this._bind("_handleClick", "_handleFoo");
 	}
-	// ...
 
 	_inherits(ExampleComponent, _BaseComponent);
 
@@ -122,7 +121,58 @@ var JointModel = (function (_React$Component2) {
 	_createClass(JointModel, [{
 		key: "render",
 		value: function render() {
-			return React.createElement("br", null);
+			var angle = new Angle(this.props.angle);
+			var leadingAngle = angle.complementaries[0];
+			var trailingAngle = angle.complementaries[1];
+
+			var cutTube = new TubeProfile(15, 0, 0);
+			var joinTube = new TubeProfile(15, 0, 0);
+			var joint = new CopedJoint(cutTube, joinTube, angle, this.props.offset);
+
+			var _concat = [].concat(_toConsumableArray(joint.cope_plot_size()));
+
+			var _concat2 = _slicedToArray(_concat, 2);
+
+			var pathWidth = _concat2[0];
+			var pathHeight = _concat2[1];
+
+			//var width = joint.plot_max - joint.plot_min;
+			//var height = cutTube.circumference;
+			//console.log(`width: ${width}`);
+			//console.log(`height: ${height}`);
+
+			var path = [].concat(_toConsumableArray(joint.gen_cope_plot(false, true))); //true to invert
+			var pathQuartile = Math.round(path.length / 4);
+			var pathPreview = path.slice(pathQuartile, -pathQuartile);
+			return React.createElement(
+				"svg",
+				{ className: "jointModel" },
+				React.createElement(
+					"g",
+					null,
+					React.createElement("rect", { className: "previewJoinTube", style: { fill: this.props.keepColor }, height: "15", width: "120" }),
+					React.createElement(
+						"text",
+						{ x: "30", y: "9pt", "font-size": "9pt" },
+						this.props.joinTitle
+					)
+				),
+				React.createElement(
+					"g",
+					{ style: { WebkitTransformOrigin: "20 15", WebkitTransform: "rotate(-" + Number(this.props.angle) + "deg)" } },
+					React.createElement("rect", { x: "10", y: "7.5", className: "previewCutTube", height: "120", width: "15" }),
+					React.createElement("rect", { x: "10", y: "7.5", className: "previewLabel", height: "10", width: "15" }),
+					React.createElement("polygon", { x: "10", y: "22.5", className: "previewCope",
+						style: { fill: this.props.cutColor, WebkitTransformOrigin: "center center", WebkitTransform: "rotate(180deg)" },
+						transform: "translate(0)",
+						points: "" + pathPreview.join(" ") + " " + pathPreview[0] }),
+					React.createElement(
+						"text",
+						{ x: "30", y: "-10pt", fontSize: "9pt", style: { WebkitTransformOrigin: "center center", WebkitTransform: "rotate(90deg)" } },
+						this.props.cutTitle
+					)
+				)
+			);
 		}
 	}]);
 
@@ -151,12 +201,12 @@ var MiterTemplate = (function (_React$Component3) {
 			var joinTube = new TubeProfile(this.props.joinOD, 0, 0);
 			var joint = new CopedJoint(cutTube, joinTube, angle, this.props.offset);
 
-			var _concat = [].concat(_toConsumableArray(joint.cope_plot_size()));
+			var _concat3 = [].concat(_toConsumableArray(joint.cope_plot_size()));
 
-			var _concat2 = _slicedToArray(_concat, 2);
+			var _concat32 = _slicedToArray(_concat3, 2);
 
-			var pathWidth = _concat2[0];
-			var pathHeight = _concat2[1];
+			var pathWidth = _concat32[0];
+			var pathHeight = _concat32[1];
 
 			//var width = joint.plot_max - joint.plot_min;
 			//var height = cutTube.circumference;
@@ -181,8 +231,8 @@ var MiterTemplate = (function (_React$Component3) {
 				React.createElement(
 					"svg",
 					{ className: "cope_vbox", x: this.props.fromLeft + this.props.units, y: this.props.fromTop + this.props.units, width: pathWidth + this.props.units, height: pathHeight + this.props.units, viewBox: "0 0 " + pathWidth + " " + pathHeight },
-					React.createElement("rect", { className: "cope_bbox", style: { fill: this.props.cutColor }, height: "100%", width: "100%" }),
-					React.createElement("polygon", { className: "cope", style: { fill: this.props.keepColor }, points: "0,0 " + path.join(" ") + " 0," + pathHeight })
+					React.createElement("rect", { className: "cope_bbox", style: { fill: this.props.keepColor }, height: "100%", width: "100%" }),
+					React.createElement("polygon", { className: "cope", style: { fill: this.props.cutColor }, points: "0,0 " + path.join(" ") + " 0," + pathHeight })
 				),
 				React.createElement(
 					"svg",
@@ -344,8 +394,8 @@ var CopeTubeApp = (function (_React$Component4) {
 			},
 			layout: "dymo-sticky-address",
 			units: "in",
-			cutColor: "lightblue",
-			keepColor: "white"
+			cutColor: "white",
+			keepColor: "lightblue"
 		};
 		this.state = Object.assign(this.state, LAYOUTS[this.state.layout][this.state.units], UNITS[this.state.units]);
 	}
@@ -378,9 +428,14 @@ var CopeTubeApp = (function (_React$Component4) {
 	}, {
 		key: "printTemplate",
 		value: function printTemplate(event) {
+			// maybe push the miter innerHTML to a new Document instead?
+			//  and the CSS
+			//  http://stackoverflow.com/questions/21379605/printing-div-content-with-css-applied
 			document.getElementById("controls").hidden = true;
+			document.getElementById("visualization").hidden = true;
 			window.print();
 			document.getElementById("controls").hidden = false;
+			document.getElementById("visualization").hidden = false;
 		}
 	}, {
 		key: "swapUnits",

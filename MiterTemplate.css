@@ -10,9 +10,9 @@
 	src: url(Y14.5M-2009.ttf);
 }
 
-#CopeTubeApp { columns: 2; -webkit-columns: 2; }
-#template { column-span: 1; }
-label, output, input, option, button { font-family: Courier,"Apple Color Emoji","Android Emoji","Segoe UI Emoji",Symbola; }
+#CopeTubeApp { columns: 3; -webkit-columns: 3; }
+#template #visualization #controls { column-span: 1; vertical-align: top; }
+label, output, input, option, button { font-family: Monaco,Droid Sans Mono, Segoe UI Mono,"Apple Color Emoji","Android Emoji","Segoe UI Emoji",Symbola; }
 input, button {
 	background: transparent;
 	border: 0;
@@ -58,4 +58,7 @@ flip { display: inline-block; -webkit-transform: scale(-1,-1); }
 */
 .flipped text { text-anchor: end; -webkit-transform-origin: center center; -webkit-transform: rotate(180deg); }
 
-#controls: { column-span: 1; }
+.previewJoinTube { stroke: black; vector-effect: non-scaling-stroke; stroke-width: 1px; }
+.previewCutTube { stroke: black; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
+.previewLabel { stroke: red; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
+.previewCope { stroke: black; vector-effect: non-scaling-stroke; stroke-width: 1px; }
