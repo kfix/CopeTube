@@ -11,13 +11,11 @@ function *step(start, end, increment=1) {
 	return count;
 }
 
-var $u2e = '&inch';
-
 class Angle {
 	//a miter angle
 
 	constructor(degrees) {
-		this.degrees = degrees;
+		this.degrees = new Number(degrees);
 		//this.radians = TWOPI * this.degrees / 360.0;
 		//this.sine = Math.sinh(this.radians);
 		//this.cosine = Math.cosh(this.radians);
@@ -29,12 +27,10 @@ class Angle {
 			new Angle(90 - this.degrees) ];
 	}
 
-	to_s(p=0,c=1) { //p:prefix c:coeffecient
+	toString(p=0,c=1) { //p:prefix c:coeffecient
 		return `${Math.trunc(p + this.degrees * c)}°`;
 		//i'd like to get .000s printed too
 	}
-
-	toString() { return this.to_s()	}
 
 	get radians() { return TWOPI * this.degrees / 360.0; }
 	get sine() { return Math.sin(this.radians); }
@@ -50,12 +46,12 @@ class TubeProfile {
 
 	//attr_reader :diameter, :faces, :gauge
 	constructor(diameter, gauge=0, faces=0) {
-		this.diameter = diameter; //outermost XY-XY extent
-		this.faces = faces;
-		this.gauge = gauge;
+		this.diameter = Number(diameter); //outermost XY-XY extent
+		this.faces = Number(faces);
+		this.gauge = Number(gauge);
 	}
 
-	to_s(u=$u2e) { return `⌀${diameter}${u}`; }
+	toString() { return `⌀${diameter}`; }
 
 	//get faces() { return this.faces; }
 	//get diameter() { return this.diameter; }
@@ -104,8 +100,7 @@ class CopedJoint {
 	// a joint of two TubeProfiles
 	//attr_reader :cut_tube, :join_tube, :angle, :offset
 
-	to_s() { return `∠${degrees.to_s()}°`; }
-	toString() { return this.to_s()	}
+	toString() { return `∠${degrees.to_s()}°`; }
 
 	constructor(cut_tube, join_tube, angle, offset=0) {
 		if (cut_tube.faces > 0) {
@@ -120,10 +115,14 @@ class CopedJoint {
 			throw "invalid angle: no parallel tubes can be joined!";
 		}
 
+		if (Math.abs(offset) > join_tube.diameter) {
+			throw "offset cannot be greater than join_tube diameter"
+		}
+
 		this.cut_tube = cut_tube;
 		this.join_tube = join_tube;
 		this.angle = angle;
-		this.offset = offset;
+		this.offset = Number(offset);
 	}
 
 	develop_coped_point(x, y) {
@@ -132,8 +131,8 @@ class CopedJoint {
 		// http://books.google.com/books?id=r7PVAAAAMAAJ&pg=PA111 (1911 ed.)
 		if (this.join_tube.faces == 0) {
 			return ( Math.sqrt(Math.pow(this.join_tube.radius,2) - Math.pow(x,2)) + y*this.angle.sine ) / this.angle.cosine;
-			//return ( Math::sqrt(self.join_tube.radius**2 - x**2) + y*self.angle.sine ) / self.angle.cosine
 			// derive the clearance of the cope from the angle of the join_tube meeting @ x,y
+			// FIXME: account for this.offset
 		} else {
 			throw "coping of faced tubes not implemented";
 			//plot first face-phase
@@ -158,14 +157,18 @@ class CopedJoint {
 		yield height;
 	}
 
-	*gen_cope_plot(invert=false, resolution=0.01) {
+	*gen_cope_plot(hflip=false, horiz=false, resolution=0.01) {
 		// plot the coped junction
 		//for (let [x, y, d] = this.cut_tube.gen_edge_plot(resolution)) {
 		var plotter = this.cut_tube.gen_edge_plot(resolution), info;
 		while (!(info = plotter.next()).done) {
 			var [x, y, d] = info.value; //get x,y and distance points for the tube's edge path one-at-a-time
 			var xcut = this.develop_coped_point(x, y); //notch x to fit the join_tube angling into the cut_tube
-			yield [invert ? (xcut - this.plot_min) : (this.plot_max - xcut), d];  //cut-from-left-side || cut-from-right-side (default)
+			if (horiz) {
+				yield [d, hflip ? (xcut - this.plot_min) : (this.plot_max - xcut)];  //cut-from-left-side || cut-from-right-side (default)
+			} else {
+				yield [hflip ? (xcut - this.plot_min) : (this.plot_max - xcut), d];  //cut-from-left-side || cut-from-right-side (default)
+			}
 		}
 		return info.value; // number of points
 	}

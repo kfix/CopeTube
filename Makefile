@@ -20,14 +20,17 @@ deps:
 
 browser/%: .babel icon.png macpin.js js/ html/ bower_components/
 	install -d $@
-	for i in .babel/* icon.png macpin.js js/* bower_components/ html/*; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
+	for i in .babel/* icon*.png macpin.js js/* bower_components/ html/*; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 
 .babel: es6
 	babel $< --out-dir $@ --source-maps --source-maps-inline
 
+bower_components:
+	bower install
+
 gh-pages: browser/$(REPO)
 	cp -RL $</* dist/$@
-	cd dist/$@; git add *; git commit; git push origin/$@
+	cd dist/$@; git add *; git commit; git push origin HEAD:$@
 	git add dist/$@
 	git commit
 	git push
