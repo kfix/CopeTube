@@ -9,7 +9,7 @@ MacPin		?= ${HOME}/src/MacPin
 
 all: $(REPO).app
 
-deps:
+builddeps:
 	brew install npm
 	npm install -g bower babel
 	bower install --save react
@@ -18,12 +18,15 @@ deps:
 	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
-browser/%: .babel icon.png macpin.js js/ html/ bower_components/
+browser/%: .babel icon.png macpin.js js html bower_components
 	install -d $@
 	for i in .babel/* icon*.png macpin.js js/* bower_components/ html/*; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 
 .babel: es6
 	babel $< --out-dir $@ --source-maps --source-maps-inline
+
+html js:
+	install -d $@
 
 bower_components:
 	bower install
@@ -75,4 +78,4 @@ release:
 endif
 
 .PRECIOUS: build/% .babel/%
-.PHONY: clean all test test.app test.chrome
+.PHONY: clean all test test.app test.chrome gh_pages
