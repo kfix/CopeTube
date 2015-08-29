@@ -11,6 +11,15 @@ function *step(start, end, increment=1) {
 	return count;
 }
 
+function *stepback(start, end, decrement=1) {
+	var count = 0;
+	for (var i = end; i > start; i -= decrement) {
+		count++;
+		yield i;
+	}
+	return count;
+}
+
 class Angle {
 	//a miter angle
 
@@ -64,12 +73,15 @@ class TubeProfile {
 			this.faces * this.diameter; //flat-to-flat, technically a "perimeter"
 	}
 
-	*gen_edge_plot(resolution=0.01) {
+	*gen_edge_plot(resolution=0.01, contra=false) {
 		//plot the edge profile of this tube
 		//FIXME: get discrete phases for segmented prints and layouts via phases=[0..1/4]? phases=[1..4] for square tube
 		if (this.faces == 0) { //round tube
 			//for (var arc_angle of step(0.0,TWOPI,resolution)) { // walk a complete circle at the desired resolution
-			var stepper = step(0.0, TWOPI, resolution), info;
+			var stepper = contra ?
+				stepback(0.0, TWOPI, resolution) : // contra-rotation
+				step(0.0, TWOPI, resolution);
+			var info;
 			while (!(info = stepper.next()).done) {
 				var arc_angle = info.value;
 				// arc: imaginary line extending from the central axis of tube-interior of the point on the tube-edge to be projected-flat
@@ -157,10 +169,10 @@ class CopedJoint {
 		yield height;
 	}
 
-	*gen_cope_plot(hflip=false, horiz=false, resolution=0.01) {
+	*gen_cope_plot(hflip=false, horiz=false, contra=false, resolution=0.01) {
 		// plot the coped junction
 		//for (let [x, y, d] = this.cut_tube.gen_edge_plot(resolution)) {
-		var plotter = this.cut_tube.gen_edge_plot(resolution), info;
+		var plotter = this.cut_tube.gen_edge_plot(resolution, contra), info;
 		while (!(info = plotter.next()).done) {
 			var [x, y, d] = info.value; //get x,y and distance points for the tube's edge path one-at-a-time
 			var xcut = this.develop_coped_point(x, y); //notch x to fit the join_tube angling into the cut_tube

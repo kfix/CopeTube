@@ -42,6 +42,15 @@ var LAYOUTS = {
 	}
 }
 
+Array.prototype.last = function () {
+  return this[this.length - 1];
+};
+
+Array.prototype.first = function () {
+  return this[0];
+};
+
+
 //import React from 'react';
 
 class BaseComponent extends React.Component {
@@ -67,9 +76,9 @@ class JointModel extends React.Component {
 		var leadingAngle = angle.complementaries[0];
 		var trailingAngle = angle.complementaries[1];
 
-		var cutTube = new TubeProfile(15, 0, 0);
-		var joinTube = new TubeProfile(15, 0, 0);
-		var joint = new CopedJoint(cutTube, joinTube, angle, this.props.offset);
+		var cutTube = new TubeProfile(10, 0, 0);
+		var joinTube = new TubeProfile(10, 0, 0);
+		var joint = new CopedJoint(cutTube, joinTube, angle, 0); //this.props.offset
 
 		var [pathWidth, pathHeight] = [...joint.cope_plot_size()];
 		//var width = joint.plot_max - joint.plot_min;
@@ -77,23 +86,32 @@ class JointModel extends React.Component {
 		//console.log(`width: ${width}`);
 		//console.log(`height: ${height}`);
 
-		var path = [...joint.gen_cope_plot(false,true)]; //true to invert
+		var path = [...joint.gen_cope_plot(true, true)]; //hflip & horiz
+
+		// get the center peak of the mini-cope to represent the front face of the fish-mouth
 		var pathQuartile = Math.round(path.length / 4);
-		var pathPreview = path.slice(pathQuartile,-pathQuartile);
+		var pathPreview = path.slice(pathQuartile,-pathQuartile); // 25% - 75% of the list
+		pathPreview = pathPreview.map(function(pt){return [(-pt[0]), pt[1]];}); //flip horiz
+//, WebkitTransform: `rotate(-${Number(this.props.angle)}deg)`
+//, WebkitTransformOrigin: "10, 7.5"
+//${180-Number(this.props.angle)}, 10, 7.5
+//<rect style={{WebkitTransformOrigin: "center top"}} x="10" y="7.5" className="previewCutTube" height="120" width="15" />
+
 		return (
 			<svg className='jointModel'>
 				<g>
 					<rect className="previewJoinTube" style={{fill: this.props.keepColor}} height="15" width="120" />
 					<text x="30" y="9pt" font-size="9pt">{this.props.joinTitle}</text>
 				</g>
-				<g style={{WebkitTransformOrigin: "20 15", WebkitTransform: `rotate(-${Number(this.props.angle)}deg)`}}>
-					<rect x="10" y="7.5" className="previewCutTube" height="120" width="15" />
-					<rect x="10" y="7.5" className="previewLabel" height="10" width="15" />
-					<polygon x="10" y="22.5" className="previewCope"
-						style={{fill: this.props.cutColor, WebkitTransformOrigin: "center center", WebkitTransform: "rotate(180deg)"}}
-						transform="translate(0)"
-						points={`${pathPreview.join(' ')} ${pathPreview[0]}`} />
+				<g style={{}} transform={`rotate(-${Number(this.props.angle)}, 17.5, 15)`} >
+					<polygon className="previewCope"
+						style={{fill: this.props.cutColor}}
+						points={`${pathPreview.join(' ')} ${pathPreview.last()[0]},100  ${pathPreview.first()[0]},100 ${pathPreview[0]}`}
+						transform={`translate(${-pathPreview.first()[0] + 25}, ${-pathPreview.first()[1] + 15}) `}
+					/>
+					<line className='guides' x1='17.5' x2='17.5' y1='0' y2='100' />
 					<text x="30" y="-10pt" fontSize="9pt" style={{WebkitTransformOrigin: "center center", WebkitTransform: "rotate(90deg)"}}>{this.props.cutTitle}</text>
+					//<rect className="previewLabel" x="10" y="7.5" height="10" width="15" />
 				</g>
 			</svg>
 		);
@@ -127,8 +145,8 @@ class MiterTemplate extends React.Component {
 				<desc></desc>
 				<metadata></metadata>
 				<svg className="cope_vbox" x={this.props.fromLeft + this.props.units} y={this.props.fromTop + this.props.units} width={pathWidth + this.props.units} height={pathHeight + this.props.units} viewBox={`0 0 ${pathWidth} ${pathHeight}`}>
-					<rect className="cope_bbox" style={{fill: this.props.keepColor}} height="100%" width="100%" />
-					<polygon className="cope" style={{fill: this.props.cutColor}} points={`0,0 ${path.join(' ')} 0,${pathHeight}`} />
+					<rect className="cope_bbox" style={{fill: `${this.props.southpaw ? this.props.cutColor : this.props.keepColor}`}} height="100%" width="100%" />
+					<polygon className="cope" style={{fill: `${this.props.southpaw ? this.props.keepColor : this.props.cutColor}`}} points={`0,0 ${path.join(' ')} 0,${pathHeight}`} />
 				</svg>
 				<svg className="guides" y={this.props.fromTop + this.props.units} width={(this.props.fromLeft + pathWidth) + this.props.units} height={pathHeight + this.props.units}>
 					<line x1="0%" y1="0%" x2="100%" y2="0%" />
@@ -139,7 +157,7 @@ class MiterTemplate extends React.Component {
 				</svg>
 				<svg className="titles" y={this.props.fromTop + this.props.units} width={this.props.fromLeft + this.props.units} height={pathHeight + this.props.units}>
 					<text x="100%" y="0%">
-						<tspan dy="-2px">{`${pathWidth.toFixed(2)}${this.props.unitSymbol}`}</tspan>
+						<tspan dx="30px" dy="-2px">{`${pathWidth.toFixed(2)}${this.props.unitSymbol}`}</tspan>
 						<tspan className="ctc_ds" x="0%" dy="8pt">ds</tspan>
 						<tspan className="emoji" id="ctc_ds" x="0%" dy="8pt">🚲</tspan>
 					</text>
