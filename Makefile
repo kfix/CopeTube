@@ -4,14 +4,14 @@ LAST_TAG	 != git describe --abbrev=0 --tags
 USER		 := kfix
 REPO		 := CopeTube
 ZIP			 := $(REPO).zip
-GH_RELEASE_JSON = '{"tag_name": "v$(VERSION)","target_commitish": "master","name": "v$(VERSION)","body": "MacPin build of version $(VERSION)","draft": false,"prerelease": true}'
+GH_RELEASE_JSON = '{"tag_name": "v$(VERSION)","target_commitish": "master","name": "v$(VERSION)","body": "$(REPO) build of version $(VERSION)","draft": false,"prerelease": true}'
 MacPin		?= ${HOME}/src/MacPin
 
 all: $(REPO).app
 
 deps:
 	brew install npm
-	npm install -g bower
+	npm install -g bower babel
 	bower install --save react
 
 %.app: $(MacPin)/Makefile browser/%
