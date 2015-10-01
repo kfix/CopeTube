@@ -4,17 +4,15 @@
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
+var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i]; return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var UNITS = {
 	"in": {
@@ -58,18 +56,24 @@ var LAYOUTS = {
 	}
 };
 
+Array.prototype.last = function () {
+	return this[this.length - 1];
+};
+
+Array.prototype.first = function () {
+	return this[0];
+};
+
 //import React from 'react';
 
 var BaseComponent = (function (_React$Component) {
+	_inherits(BaseComponent, _React$Component);
+
 	function BaseComponent() {
 		_classCallCheck(this, BaseComponent);
 
-		if (_React$Component != null) {
-			_React$Component.apply(this, arguments);
-		}
+		_get(Object.getPrototypeOf(BaseComponent.prototype), "constructor", this).apply(this, arguments);
 	}
-
-	_inherits(BaseComponent, _React$Component);
 
 	_createClass(BaseComponent, [{
 		key: "_bind",
@@ -90,33 +94,30 @@ var BaseComponent = (function (_React$Component) {
 })(React.Component);
 
 var ExampleComponent = (function (_BaseComponent) {
+	_inherits(ExampleComponent, _BaseComponent);
+
 	function ExampleComponent() {
 		_classCallCheck(this, ExampleComponent);
 
 		_get(Object.getPrototypeOf(ExampleComponent.prototype), "constructor", this).call(this);
-		this._bind("_handleClick", "_handleFoo");
+		this._bind('_handleClick', '_handleFoo');
 	}
 
-	_inherits(ExampleComponent, _BaseComponent);
-
+	// static svg's should use https://github.com/matthewwithanm/react-inlinesvg https://www.npmjs.com/package/react-inlinesvg
+	// react's svg support is spotty: https://github.com/facebook/react/labels/SVG
+	// texts/tspans need to be marked up with fully-interpolated-strings: https://github.com/facebook/react/issues/1236 https://github.com/facebook/react/pull/3351
+	//  https://github.com/facebook/react/blob/master/src/renderers/dom/shared/ReactDOMTextComponent.js#L90
 	return ExampleComponent;
 })(BaseComponent);
 
-// static svg's should use https://github.com/matthewwithanm/react-inlinesvg https://www.npmjs.com/package/react-inlinesvg
-// react's svg support is spotty: https://github.com/facebook/react/labels/SVG
-// texts/tspans need to be marked up with fully-interpolated-strings: https://github.com/facebook/react/issues/1236 https://github.com/facebook/react/pull/3351
-//  https://github.com/facebook/react/blob/master/src/renderers/dom/shared/ReactDOMTextComponent.js#L90
-
 var JointModel = (function (_React$Component2) {
+	_inherits(JointModel, _React$Component2);
+
 	function JointModel() {
 		_classCallCheck(this, JointModel);
 
-		if (_React$Component2 != null) {
-			_React$Component2.apply(this, arguments);
-		}
+		_get(Object.getPrototypeOf(JointModel.prototype), "constructor", this).apply(this, arguments);
 	}
-
-	_inherits(JointModel, _React$Component2);
 
 	_createClass(JointModel, [{
 		key: "render",
@@ -125,25 +126,33 @@ var JointModel = (function (_React$Component2) {
 			var leadingAngle = angle.complementaries[0];
 			var trailingAngle = angle.complementaries[1];
 
-			var cutTube = new TubeProfile(15, 0, 0);
-			var joinTube = new TubeProfile(15, 0, 0);
-			var joint = new CopedJoint(cutTube, joinTube, angle, this.props.offset);
+			var cutTube = new TubeProfile(10, 0, 0);
+			var joinTube = new TubeProfile(10, 0, 0);
+			var joint = new CopedJoint(cutTube, joinTube, angle, 0); //this.props.offset
 
-			var _concat = [].concat(_toConsumableArray(joint.cope_plot_size()));
+			var _ref = [].concat(_toConsumableArray(joint.cope_plot_size()));
 
-			var _concat2 = _slicedToArray(_concat, 2);
-
-			var pathWidth = _concat2[0];
-			var pathHeight = _concat2[1];
+			var pathWidth = _ref[0];
+			var pathHeight = _ref[1];
 
 			//var width = joint.plot_max - joint.plot_min;
 			//var height = cutTube.circumference;
 			//console.log(`width: ${width}`);
 			//console.log(`height: ${height}`);
 
-			var path = [].concat(_toConsumableArray(joint.gen_cope_plot(false, true))); //true to invert
+			var path = [].concat(_toConsumableArray(joint.gen_cope_plot(true, true))); //hflip & horiz
+
+			// get the center peak of the mini-cope to represent the front face of the fish-mouth
 			var pathQuartile = Math.round(path.length / 4);
-			var pathPreview = path.slice(pathQuartile, -pathQuartile);
+			var pathPreview = path.slice(pathQuartile, -pathQuartile); // 25% - 75% of the list
+			pathPreview = pathPreview.map(function (pt) {
+				return [-pt[0], pt[1]];
+			}); //flip horiz
+			//, WebkitTransform: `rotate(-${Number(this.props.angle)}deg)`
+			//, WebkitTransformOrigin: "10, 7.5"
+			//${180-Number(this.props.angle)}, 10, 7.5
+			//<rect style={{WebkitTransformOrigin: "center top"}} x="10" y="7.5" className="previewCutTube" height="120" width="15" />
+
 			return React.createElement(
 				"svg",
 				{ className: "jointModel" },
@@ -159,18 +168,20 @@ var JointModel = (function (_React$Component2) {
 				),
 				React.createElement(
 					"g",
-					{ style: { WebkitTransformOrigin: "20 15", WebkitTransform: "rotate(-" + Number(this.props.angle) + "deg)" } },
-					React.createElement("rect", { x: "10", y: "7.5", className: "previewCutTube", height: "120", width: "15" }),
-					React.createElement("rect", { x: "10", y: "7.5", className: "previewLabel", height: "10", width: "15" }),
-					React.createElement("polygon", { x: "10", y: "22.5", className: "previewCope",
-						style: { fill: this.props.cutColor, WebkitTransformOrigin: "center center", WebkitTransform: "rotate(180deg)" },
-						transform: "translate(0)",
-						points: "" + pathPreview.join(" ") + " " + pathPreview[0] }),
+					{ style: {}, transform: "rotate(-" + Number(this.props.angle) + ", 17.5, 15)" },
+					React.createElement("polygon", { className: "previewCope",
+						style: { fill: this.props.cutColor },
+						points: pathPreview.join(' ') + " " + pathPreview.last()[0] + ",100  " + pathPreview.first()[0] + ",100 " + pathPreview[0],
+						transform: "translate(" + (-pathPreview.first()[0] + 25) + ", " + (-pathPreview.first()[1] + 15) + ") "
+					}),
+					React.createElement("line", { className: "guides", x1: "17.5", x2: "17.5", y1: "0", y2: "100" }),
 					React.createElement(
 						"text",
 						{ x: "30", y: "-10pt", fontSize: "9pt", style: { WebkitTransformOrigin: "center center", WebkitTransform: "rotate(90deg)" } },
 						this.props.cutTitle
-					)
+					),
+					"//",
+					React.createElement("rect", { className: "previewLabel", x: "10", y: "7.5", height: "10", width: "15" })
 				)
 			);
 		}
@@ -180,15 +191,17 @@ var JointModel = (function (_React$Component2) {
 })(React.Component);
 
 var MiterTemplate = (function (_React$Component3) {
+	_inherits(MiterTemplate, _React$Component3);
+
 	function MiterTemplate() {
 		_classCallCheck(this, MiterTemplate);
 
-		if (_React$Component3 != null) {
-			_React$Component3.apply(this, arguments);
-		}
+		_get(Object.getPrototypeOf(MiterTemplate.prototype), "constructor", this).apply(this, arguments);
 	}
 
-	_inherits(MiterTemplate, _React$Component3);
+	//class JunctionPreview
+	// make a rendering of the two tubes' junction
+	//  allow touch-dragging, rotating and pinching to reorient and resize the tubes
 
 	_createClass(MiterTemplate, [{
 		key: "render",
@@ -201,12 +214,10 @@ var MiterTemplate = (function (_React$Component3) {
 			var joinTube = new TubeProfile(this.props.joinOD, 0, 0);
 			var joint = new CopedJoint(cutTube, joinTube, angle, this.props.offset);
 
-			var _concat3 = [].concat(_toConsumableArray(joint.cope_plot_size()));
+			var _ref2 = [].concat(_toConsumableArray(joint.cope_plot_size()));
 
-			var _concat32 = _slicedToArray(_concat3, 2);
-
-			var pathWidth = _concat32[0];
-			var pathHeight = _concat32[1];
+			var pathWidth = _ref2[0];
+			var pathHeight = _ref2[1];
 
 			//var width = joint.plot_max - joint.plot_min;
 			//var height = cutTube.circumference;
@@ -231,8 +242,8 @@ var MiterTemplate = (function (_React$Component3) {
 				React.createElement(
 					"svg",
 					{ className: "cope_vbox", x: this.props.fromLeft + this.props.units, y: this.props.fromTop + this.props.units, width: pathWidth + this.props.units, height: pathHeight + this.props.units, viewBox: "0 0 " + pathWidth + " " + pathHeight },
-					React.createElement("rect", { className: "cope_bbox", style: { fill: this.props.keepColor }, height: "100%", width: "100%" }),
-					React.createElement("polygon", { className: "cope", style: { fill: this.props.cutColor }, points: "0,0 " + path.join(" ") + " 0," + pathHeight })
+					React.createElement("rect", { className: "cope_bbox", style: { fill: "" + (this.props.southpaw ? this.props.cutColor : this.props.keepColor) }, height: "100%", width: "100%" }),
+					React.createElement("polygon", { className: "cope", style: { fill: "" + (this.props.southpaw ? this.props.keepColor : this.props.cutColor) }, points: "0,0 " + path.join(' ') + " 0," + pathHeight })
 				),
 				React.createElement(
 					"svg",
@@ -251,8 +262,8 @@ var MiterTemplate = (function (_React$Component3) {
 						{ x: "100%", y: "0%" },
 						React.createElement(
 							"tspan",
-							{ dy: "-2px" },
-							"" + pathWidth.toFixed(2) + "" + this.props.unitSymbol
+							{ dx: "30px", dy: "-2px" },
+							"" + pathWidth.toFixed(2) + this.props.unitSymbol
 						),
 						React.createElement(
 							"tspan",
@@ -282,7 +293,7 @@ var MiterTemplate = (function (_React$Component3) {
 					React.createElement(
 						"text",
 						{ className: "join_od", x: "115%", y: "50%" },
-						"←⌀" + this.props.joinOD + "" + this.props.unitSymbol + "→"
+						"←⌀" + this.props.joinOD + this.props.unitSymbol + "→"
 					),
 					React.createElement(
 						"text",
@@ -326,7 +337,7 @@ var MiterTemplate = (function (_React$Component3) {
 							React.createElement(
 								"tspan",
 								{ className: "cut_od", dy: "-1pt" },
-								"⟷⌀" + this.props.cutOD + "" + this.props.unitSymbol
+								"⟷⌀" + this.props.cutOD + this.props.unitSymbol
 							),
 							React.createElement("tspan", { className: "ctc_ds", x: "0%", dy: "8pt" })
 						)
@@ -338,7 +349,7 @@ var MiterTemplate = (function (_React$Component3) {
 					React.createElement(
 						"tspan",
 						{ x: "1px", dy: "7pt" },
-						"《" + pathWidth.toFixed(2) + "" + this.props.unitSymbol + "》"
+						"《" + pathWidth.toFixed(2) + this.props.unitSymbol + "》"
 					),
 					React.createElement("rect", { className: "tabcut", height: "100%", width: "100%" }),
 					React.createElement(
@@ -347,7 +358,7 @@ var MiterTemplate = (function (_React$Component3) {
 						React.createElement(
 							"tspan",
 							null,
-							"✂︎" + pathWidth.toFixed(2) + "" + this.props.unitSymbol + "✂︎"
+							"✂︎" + pathWidth.toFixed(2) + this.props.unitSymbol + "✂︎"
 						),
 						React.createElement(
 							"tspan",
@@ -368,16 +379,14 @@ var MiterTemplate = (function (_React$Component3) {
 	return MiterTemplate;
 })(React.Component);
 
-//class JunctionPreview
-// make a rendering of the two tubes' junction
-//  allow touch-dragging, rotating and pinching to reorient and resize the tubes
-
 function ReactLink(value, requestChange) {
 	this.value = value;
 	this.requestChange = requestChange;
 }
 
 var CopeTubeApp = (function (_React$Component4) {
+	_inherits(CopeTubeApp, _React$Component4);
+
 	function CopeTubeApp() {
 		_classCallCheck(this, CopeTubeApp);
 
@@ -399,8 +408,6 @@ var CopeTubeApp = (function (_React$Component4) {
 		};
 		this.state = Object.assign(this.state, LAYOUTS[this.state.layout][this.state.units], UNITS[this.state.units]);
 	}
-
-	_inherits(CopeTubeApp, _React$Component4);
 
 	_createClass(CopeTubeApp, [{
 		key: "linkState",
@@ -483,13 +490,13 @@ var CopeTubeApp = (function (_React$Component4) {
 						"form",
 						null,
 						"⦦",
-						React.createElement("input", { type: "text", valueLink: this.linkSubState("miter", "joinTitle") }),
+						React.createElement("input", { type: "text", valueLink: this.linkSubState('miter', 'joinTitle') }),
 						React.createElement(
 							"label",
 							null,
 							"⌀"
 						),
-						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "joinOD") }),
+						React.createElement("input", { type: "number", valueLink: this.linkSubState('miter', 'joinOD') }),
 						React.createElement(
 							"label",
 							null,
@@ -498,13 +505,13 @@ var CopeTubeApp = (function (_React$Component4) {
 						),
 						React.createElement("br", null),
 						"⦣⦢",
-						React.createElement("input", { type: "text", valueLink: this.linkSubState("miter", "cutTitle") }),
+						React.createElement("input", { type: "text", valueLink: this.linkSubState('miter', 'cutTitle') }),
 						React.createElement(
 							"label",
 							null,
 							"⌀"
 						),
-						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "cutOD") }),
+						React.createElement("input", { type: "number", valueLink: this.linkSubState('miter', 'cutOD') }),
 						React.createElement(
 							"label",
 							null,
@@ -517,8 +524,8 @@ var CopeTubeApp = (function (_React$Component4) {
 							null,
 							"⟀"
 						),
-						React.createElement("input", { type: "range", min: 0, max: 44, step: 0.5, valueLink: this.linkSubState("miter", "angle") }),
-						React.createElement("input", { type: "number", min: 0, valueLink: this.linkSubState("miter", "angle") }),
+						React.createElement("input", { type: "range", min: 0, max: 44, step: 0.5, valueLink: this.linkSubState('miter', 'angle') }),
+						React.createElement("input", { type: "number", min: 0, valueLink: this.linkSubState('miter', 'angle') }),
 						React.createElement(
 							"label",
 							null,
@@ -530,7 +537,7 @@ var CopeTubeApp = (function (_React$Component4) {
 							null,
 							"offset"
 						),
-						React.createElement("input", { type: "number", valueLink: this.linkSubState("miter", "offset") }),
+						React.createElement("input", { type: "number", valueLink: this.linkSubState('miter', 'offset') }),
 						React.createElement(
 							"label",
 							null,
@@ -542,7 +549,7 @@ var CopeTubeApp = (function (_React$Component4) {
 							null,
 							"southpaw"
 						),
-						React.createElement("input", { type: "checkbox", checkedLink: this.linkSubState("miter", "southpaw") }),
+						React.createElement("input", { type: "checkbox", checkedLink: this.linkSubState('miter', 'southpaw') }),
 						React.createElement("br", null),
 						Object.keys(UNITS).map(function (k) {
 							return React.createElement("input", { type: "radio", name: "units", key: k, defaultChecked: _this4.state.units === k, onChange: function (target) {
@@ -563,7 +570,7 @@ var CopeTubeApp = (function (_React$Component4) {
 						),
 						React.createElement(
 							"select",
-							{ valueLink: this.linkState("layout") },
+							{ valueLink: this.linkState('layout') },
 							Object.keys(LAYOUTS).map(function (k) {
 								return React.createElement(
 									"option",
@@ -573,8 +580,8 @@ var CopeTubeApp = (function (_React$Component4) {
 							})
 						),
 						React.createElement("br", null),
-						React.createElement("input", { type: "color", valueLink: this.linkState("cutColor") }),
-						React.createElement("input", { type: "color", valueLink: this.linkState("keepColor") })
+						React.createElement("input", { type: "color", valueLink: this.linkState('cutColor') }),
+						React.createElement("input", { type: "color", valueLink: this.linkState('keepColor') })
 					),
 					React.createElement(
 						"button",
@@ -593,4 +600,4 @@ React.render(React.createElement(CopeTubeApp, null), document.body);
 /* <label>units</label><select valueLink={this.linkState('units')}>
 { Object.keys(UNITS).map((k) => <option key={k} value={k}>{UNITS[k].unitName}</option>) }
 </select> */
-//# sourceMappingURL=/Users/kfix/src/CopeTube/.babel/copetube.js.map
+//# sourceMappingURL=/Users/jkorkames/src/CopeTube/.babel/copetube.js.map

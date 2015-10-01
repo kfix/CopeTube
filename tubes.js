@@ -3,17 +3,17 @@
 
 "use strict";
 
+var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-function _slicedToArray(arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }
-
-var marked0$0 = [step].map(regeneratorRuntime.mark);
+var marked0$0 = [step, stepback].map(regeneratorRuntime.mark);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var TWOPI = 2 * Math.PI;
 function step(start, end) {
-	var increment = arguments[2] === undefined ? 1 : arguments[2];
+	var increment = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
 	var count, i;
 	return regeneratorRuntime.wrap(function step$(context$1$0) {
 		while (1) switch (context$1$0.prev = context$1$0.next) {
@@ -46,6 +46,40 @@ function step(start, end) {
 	}, marked0$0[0], this);
 }
 
+function stepback(start, end) {
+	var decrement = arguments.length <= 2 || arguments[2] === undefined ? 1 : arguments[2];
+	var count, i;
+	return regeneratorRuntime.wrap(function stepback$(context$1$0) {
+		while (1) switch (context$1$0.prev = context$1$0.next) {
+			case 0:
+				count = 0;
+				i = end;
+
+			case 2:
+				if (!(i > start)) {
+					context$1$0.next = 9;
+					break;
+				}
+
+				count++;
+				context$1$0.next = 6;
+				return i;
+
+			case 6:
+				i -= decrement;
+				context$1$0.next = 2;
+				break;
+
+			case 9:
+				return context$1$0.abrupt("return", count);
+
+			case 10:
+			case "end":
+				return context$1$0.stop();
+		}
+	}, marked0$0[1], this);
+}
+
 var Angle = (function () {
 	//a miter angle
 
@@ -61,31 +95,31 @@ var Angle = (function () {
 	_createClass(Angle, [{
 		key: "toString",
 		value: function toString() {
-			var p = arguments[0] === undefined ? 0 : arguments[0];
-			var c = arguments[1] === undefined ? 1 : arguments[1];
+			var p = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+			var c = arguments.length <= 1 || arguments[1] === undefined ? 1 : arguments[1];
 			//p:prefix c:coeffecient
-			return "" + Math.trunc(p + this.degrees * c) + "°";
+			return Math.trunc(p + this.degrees * c) + "°";
 			//i'd like to get .000s printed too
 		}
 	}, {
 		key: "complementaries",
-		get: function () {
+		get: function get() {
 			//split a straight 180 angle into 2 complementary angles and return them
 			return [new Angle(this.degrees + 90), new Angle(90 - this.degrees)];
 		}
 	}, {
 		key: "radians",
-		get: function () {
-			return TWOPI * this.degrees / 360;
+		get: function get() {
+			return TWOPI * this.degrees / 360.0;
 		}
 	}, {
 		key: "sine",
-		get: function () {
+		get: function get() {
 			return Math.sin(this.radians);
 		}
 	}, {
 		key: "cosine",
-		get: function () {
+		get: function get() {
 			return Math.cos(this.radians);
 		}
 	}]);
@@ -103,8 +137,8 @@ var TubeProfile = (function () {
 	//attr_reader :diameter, :faces, :gauge
 
 	function TubeProfile(diameter) {
-		var gauge = arguments[1] === undefined ? 0 : arguments[1];
-		var faces = arguments[2] === undefined ? 0 : arguments[2];
+		var gauge = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+		var faces = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
 
 		_classCallCheck(this, TubeProfile);
 
@@ -113,15 +147,24 @@ var TubeProfile = (function () {
 		this.gauge = Number(gauge);
 	}
 
+	//class ButtJoint
+	//  return two tubes that both need edge mitering
+
 	_createClass(TubeProfile, [{
 		key: "toString",
 		value: function toString() {
 			return "⌀" + diameter;
 		}
+
+		//get faces() { return this.faces; }
+		//get diameter() { return this.diameter; }
+		//get gauge() { return this.gauge; }
 	}, {
 		key: "gen_edge_plot",
+		//flat-to-flat, technically a "perimeter"
 		value: regeneratorRuntime.mark(function gen_edge_plot() {
-			var resolution = arguments[0] === undefined ? 0.01 : arguments[0];
+			var resolution = arguments.length <= 0 || arguments[0] === undefined ? 0.01 : arguments[0];
+			var contra = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 			var stepper, info, arc_angle, d, x, y;
 			return regeneratorRuntime.wrap(function gen_edge_plot$(context$2$0) {
 				while (1) switch (context$2$0.prev = context$2$0.next) {
@@ -131,7 +174,8 @@ var TubeProfile = (function () {
 							break;
 						}
 
-						stepper = step(0, TWOPI, resolution);
+						stepper = contra ? stepback(0.0, TWOPI, resolution) : // contra-rotation
+						step(0.0, TWOPI, resolution);
 
 					case 2:
 						if ((info = stepper.next()).done) {
@@ -144,8 +188,7 @@ var TubeProfile = (function () {
 						x = this.radius * Math.cos(arc_angle);
 						y = this.radius * Math.sin(arc_angle);
 						context$2$0.next = 9;
-						return [x, y, d] // stream out the translated points
-						;
+						return [x, y, d];
 
 					case 9:
 						context$2$0.next = 2;
@@ -165,30 +208,36 @@ var TubeProfile = (function () {
 		})
 	}, {
 		key: "radius",
-
-		//get faces() { return this.faces; }
-		//get diameter() { return this.diameter; }
-		//get gauge() { return this.gauge; }
-		get: function () {
-			return this.diameter / 2;
+		get: function get() {
+			return this.diameter / 2.0;
 		}
 	}, {
 		key: "circumference",
-		get: function () {
+		get: function get() {
 			return this.faces == 0 ? TWOPI * this.radius : //round tube
-			this.faces * this.diameter; //flat-to-flat, technically a "perimeter"
+			this.faces * this.diameter;
 		}
 	}]);
 
 	return TubeProfile;
 })();
 
-//class ButtJoint
-//  return two tubes that both need edge mitering
+// no impl for polygonal toobs!
 
 var CopedJoint = (function () {
+	_createClass(CopedJoint, [{
+		key: "toString",
+
+		// a joint of two TubeProfiles
+		//attr_reader :cut_tube, :join_tube, :angle, :offset
+
+		value: function toString() {
+			return "∠" + degrees.to_s() + "°";
+		}
+	}]);
+
 	function CopedJoint(cut_tube, join_tube, angle) {
-		var offset = arguments[3] === undefined ? 0 : arguments[3];
+		var offset = arguments.length <= 3 || arguments[3] === undefined ? 0 : arguments[3];
 
 		_classCallCheck(this, CopedJoint);
 
@@ -200,7 +249,7 @@ var CopedJoint = (function () {
 			throw "join_tube must be same size or larger than cut_tube";
 		}
 
-		if (angle.radians <= 0 || angle.radians >= TWOPI) {
+		if (angle.radians <= 0.0 || angle.radians >= TWOPI) {
 			throw "invalid angle: no parallel tubes can be joined!";
 		}
 
@@ -215,15 +264,6 @@ var CopedJoint = (function () {
 	}
 
 	_createClass(CopedJoint, [{
-		key: "toString",
-
-		// a joint of two TubeProfiles
-		//attr_reader :cut_tube, :join_tube, :angle, :offset
-
-		value: function toString() {
-			return "∠" + degrees.to_s() + "°";
-		}
-	}, {
 		key: "develop_coped_point",
 		value: function develop_coped_point(x, y) {
 			// transpose any given x,y point to its mitered (by this.angle) position
@@ -234,11 +274,11 @@ var CopedJoint = (function () {
 				// derive the clearance of the cope from the angle of the join_tube meeting @ x,y
 				// FIXME: account for this.offset
 			} else {
-				throw "coping of faced tubes not implemented";
-				//plot first face-phase
-				//apply transform matrix to the plotset for the desired miter angle
-				//repeat for each remaining phase
-			}
+					throw "coping of faced tubes not implemented";
+					//plot first face-phase
+					//apply transform matrix to the plotset for the desired miter angle
+					//repeat for each remaining phase
+				}
 		}
 	}, {
 		key: "cope_plot_size",
@@ -269,16 +309,17 @@ var CopedJoint = (function () {
 	}, {
 		key: "gen_cope_plot",
 		value: regeneratorRuntime.mark(function gen_cope_plot() {
-			var hflip = arguments[0] === undefined ? false : arguments[0];
-			var horiz = arguments[1] === undefined ? false : arguments[1];
-			var resolution = arguments[2] === undefined ? 0.01 : arguments[2];
+			var hflip = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+			var horiz = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+			var contra = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+			var resolution = arguments.length <= 3 || arguments[3] === undefined ? 0.01 : arguments[3];
 
 			var plotter, info, _info$value, x, y, d, xcut;
 
 			return regeneratorRuntime.wrap(function gen_cope_plot$(context$2$0) {
 				while (1) switch (context$2$0.prev = context$2$0.next) {
 					case 0:
-						plotter = this.cut_tube.gen_edge_plot(resolution);
+						plotter = this.cut_tube.gen_edge_plot(resolution, contra);
 
 					case 1:
 						if ((info = plotter.next()).done) {
@@ -323,13 +364,13 @@ var CopedJoint = (function () {
 		})
 	}, {
 		key: "plot_min",
-		get: function () {
+		get: function get() {
 			return this.develop_coped_point(this.cut_tube.radius, 0);
 		}
+		// calc cope's least-inset point
 	}, {
 		key: "plot_max",
-		// calc cope's least-inset point
-		get: function () {
+		get: function get() {
 			return this.develop_coped_point(0, this.cut_tube.radius);
 		}
 	}]);
@@ -349,10 +390,10 @@ var CopedJoint = (function () {
 // distance along the circumference of the tube
 
 // translate angle to x,y coords on the edge of the tube, "looking down the barrel"
+// stream out the translated points
 
 //console.log(`generated ${info.value} points`)
 // number of points
-// no impl for polygonal toobs!
 
 //console.log([this.join_tube.radius,this.cut_tube.radius,this.angle,this.angle.sine,this.angle.cosine,this.angle.radians]);
 //console.log(this.angle);
@@ -367,4 +408,4 @@ var CopedJoint = (function () {
 //cut-from-left-side || cut-from-right-side (default)
 //cut-from-left-side || cut-from-right-side (default)
 // number of points
-//# sourceMappingURL=/Users/kfix/src/CopeTube/.babel/tubes.js.map
+//# sourceMappingURL=/Users/jkorkames/src/CopeTube/.babel/tubes.js.map
