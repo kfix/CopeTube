@@ -9,27 +9,33 @@ MacPin		?= ${HOME}/src/MacPin
 
 all: $(REPO).app
 
-builddeps:
-	brew install npm
-	npm install -g bower babel
-	bower install --save react
-
 %.app: $(MacPin)/Makefile browser/%
 	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
-browser/%: .babel icon.png macpin.js js html bower_components
+browser/%: icon.png macpin.js index.html jspm_packages css fonts config.js build.js build.js.map lib
+	#ln -sf $(PWD) $@
 	install -d $@
-	for i in .babel/* icon*.png macpin.js js/* bower_components/ html/*; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
+	for i in $+; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
+	touch $@
 
-.babel: es6
-	babel $< --out-dir $@ --source-maps --source-maps-inline
+# https://github.com/jspm/jspm-cli/blob/master/docs/production-workflows.md
+# `jspm *` unnecessarily touches config.js & package.json, screws up mtime-based dependencies
+# https://github.com/jspm/jspm-cli/issues/113://github.com/jspm/jspm-cli/issues/1133
 
-html js:
-	install -d $@
+build.js build.js.map: lib $(wildcard lib/*.js) package.json config.js
+	jspm bundle lib/main --inject
+	jspm unbundle
 
-bower_components:
-	bower install
+config.js jspm_packages: package.json
+	jspm install
+
+#node_modules: package.json
+#	npm install
+#	touch $@
+#jspm: node_modules
+#	jspm init -p
+#	jspm dl-loader babel
 
 gh-pages: browser/$(REPO)
 	cp -RL $</* dist/$@
@@ -38,14 +44,14 @@ gh-pages: browser/$(REPO)
 	git commit
 	git push
 
-test: browser/$(REPO)
-	open $</index.html
-
-test.chrome: browser/$(REPO)
-	open -a "Google Chrome.app" $</index.html
-
-test.app: $(REPO).app
+browser/$(REPO)/index.html: browser/$(REPO)
+test: browser/$(REPO)/index.html
 	open $<
+test.chrome: browser/$(REPO)/index.html
+	open -a "Google Chrome.app" --args --disable-web-security $<
+
+test.app: $(REPO).app/Contents/MacOS/$(REPO)
+	($^ -i)
 
 # http://caspervonb.com/javascript/an-overview-of-javascript-in-2015-ecmascript-6/
 # http://babeljs.io/docs/usage/cli/
@@ -56,7 +62,7 @@ install: $(REPO).app
 	cp -R $< ~/Applications
 
 clean:
-	-rm -rf browser build *.app
+	-rm -rf browser build.* *.app
 
 tag:
 	git tag -f -a v$(VERSION) -m 'release $(VERSION)'

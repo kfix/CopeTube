@@ -1,13 +1,13 @@
 @font-face {
 	font-family: Symbola;
 	src: local(Symbola);
-	src: url(Symbola.ttf);
+	src: url(../fonts/Symbola.ttf);
 }
 
 @font-face {
 	font-family: Y14M;
 	src: local(Y14.5M-2009);
-	src: url(Y14.5M-2009.ttf);
+	src: url(../fonts/Y14.5M-2009.ttf);
 }
 
 #CopeTubeApp { columns: 3; -webkit-columns: 3; }

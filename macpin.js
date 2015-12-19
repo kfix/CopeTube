@@ -4,16 +4,18 @@
 "use strict";
 var delegate = {}; // our delegate to receive events from the webview app
 
-var copetube = {url: 'file://' + $.app.resourcePath + '/simple.html', transparent: true};
-var copetubeDev = {url: 'file:///Users/joey/src/CopeTube/browser/CopeTube/simple.html', transparent: true}; // f*it, do it live!
+var copetube = {url: 'file://' + $.app.resourcePath + '/index.html', transparent: true};
+var copetubeDev = {url: 'file:///Users/joey/src/CopeTube/browser/CopeTube/index.html', transparent: true}; // f*it, do it live!
 
 delegate.launchURL = function(url) {
 	console.log("macpin.js: launching " + url);
 	var comps = url.split(":"),
 		scheme = comps.shift(),
 		addr = comps.shift();
-	switch (scheme + ":") {
+	switch (scheme) {
+		//"file":
 		default:
+			$.browser.tabSelected = new $.WebView({url: url});
 	}
 };
 
