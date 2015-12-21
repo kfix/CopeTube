@@ -2,13 +2,13 @@
   "name": "copetube",
   "version": "1.0.0",
   "description": "Interactively design precise tube-notching templates and export them as SVG files for printing to sticky labels.",
-  "main": "copetube.js",
+  "main": "lib/copetube.js",
   "dependencies": {
     "jspm": "^0.16.15"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "make"
+    "build": "make"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/kfix/CopeTube#readme",
   "jspm": {
+    "main": "lib/main",
     "dependencies": {
       "react": "npm:react@^0.14.3",
       "react-dom": "npm:react-dom@^0.14.3"

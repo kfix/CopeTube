@@ -21,14 +21,13 @@ browser/%: icon.png macpin.js index.html jspm_packages css fonts config.js build
 
 # https://github.com/jspm/jspm-cli/blob/master/docs/production-workflows.md
 # `jspm *` unnecessarily touches config.js & package.json, screws up mtime-based dependencies
-# https://github.com/jspm/jspm-cli/issues/113://github.com/jspm/jspm-cli/issues/1133
+#   may be fixed in 0.17: https://github.com/jspm/jspm-cli/issues/1133
 
 build.js build.js.map: lib $(wildcard lib/*.js) package.json config.js
-	jspm bundle lib/main --inject
-	jspm unbundle
+	jspm bundle lib/main - react - react-dom - react-formable build.js
 
 config.js jspm_packages: package.json
-	jspm install
+	#jspm install
 
 #node_modules: package.json
 #	npm install
@@ -49,7 +48,8 @@ test: browser/$(REPO)/index.html
 	open $<
 test.chrome: browser/$(REPO)/index.html
 	open -a "Google Chrome.app" --args --disable-web-security $<
-
+test.macpin: build.js
+	(exec -a CopeTube macpin -i $(PWD)/index.html)
 test.app: $(REPO).app/Contents/MacOS/$(REPO)
 	($^ -i)
 
