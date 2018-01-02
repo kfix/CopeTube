@@ -24,6 +24,8 @@ N-many-tube & non-round-tubing templating not yet supported.
 * [metalgeek's](http://www.metalgeek.com/static/cope.pcgi) [`cope.pcgi`](http://www.metalgeek.com/static/cope.html)
 * [Dog Feather Designs'](https://devpost.com/software/tubenotcher-paper-template-generator) [TubeNotcher](http://dogfeatherdesign.com/ttn_js/#tab2)
   * uses jQuery & Canvas instead of React and SVG, cool! But code is .min.js only :-(
+* [Tube Joint Pattern Generator](http://cq.cx/tubejoin.pl)
+  * it's [JS](http://cq.cx/js/tubejoin.js): bespoke PDF, DXF, UI generators and a ThreeJS renderer!
 * _A Manual of Engineering Drawing_ by [Thomas French](http://wosu.org/2012/archive/horseshoe/men.htm#m2): _Intersection of two cylinders_
   * 1911 1st edition: [page 112](http://books.google.com/books?id=r7PVAAAAMAAJ&pg=PA111)
   * 1947 7th edition: page 449
