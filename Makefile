@@ -29,7 +29,7 @@ test: browser/$(REPO)/index.html
 test.chrome: browser/$(REPO)/index.html
 	open -a "Google Chrome.app" --args --disable-web-security $<
 test.macpin:
-	(open -a MacPin.app --args -i $(PWD)/index.html)
+	(open -a MacPin.app --args -i file://$(PWD)/index.html)
 test.app: $(REPO).app/Contents/MacOS/$(REPO)
 	($^ -i)
 
