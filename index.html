@@ -11,13 +11,10 @@
 		<link rel="apple-touch-icon" sizes="192x192" href="icon192.png" />
 		<link rel="manifest" href="chrome_app_manifest.json" />
 		<link href="css/MiterTemplate.css" type="text/css" rel="stylesheet" xmlns="http://www.w3.org/1999/xhtml" />
-		<script src="jspm_packages/system.js"></script> <!-- provides System() and script:type=module -->
-		<script src="config.js"></script> <!-- https://github.com/systemjs/systemjs/blob/master/docs/config-api.md -->
-		<script src="build.js"></script>
-		<script src="app/demo.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<script type="module" src="./app/demo.js"></script>
 	</head>
 	<body>
 		<div id="demoRoot"><button onclick="demo(document.getElementById('demoRoot'))">start CopeTube demo</button></div>
-		<script>demo(document.getElementById('demoRoot'));</script>
 	</body>
 </html>
