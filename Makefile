@@ -24,12 +24,12 @@ gh-pages: browser/$(REPO)/
 	git commit
 	git push
 
-test: browser/$(REPO)/index.html
+test: index.html
 	open $<
-test.chrome: browser/$(REPO)/index.html
-	open -a "Google Chrome.app" --args --disable-web-security $<
-test.macpin:
-	(open -a MacPin.app --args -i file://$(PWD)/index.html)
+test.chrome: index.html
+	(open -a "Google Chrome.app" file://$(PWD)/$< --args '--disable-web-security' '--user-data-dir=' '--allow-file-access-from-files')
+test.macpin: index.html
+	(open -a MacPin.app --args -i file://$(PWD)/$<)
 test.app: $(REPO).app/Contents/MacOS/$(REPO)
 	($^ -i)
 
