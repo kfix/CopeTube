@@ -10,8 +10,8 @@
 	src: url(../fonts/Y14.5M-2009.ttf);
 }
 
-#CopeTubeApp, #CopeTubeDemo { columns: 3; -webkit-columns: 3; }
-#template #visualization #controls { column-span: 1; vertical-align: top; }
+#CopeTubeApp, #CopeTubeDemo { column-width: 200px; }
+#template, #visualization, #controls { column-span: none; vertical-align: top; }
 label, output, input, option, button { font-family: Monaco,Droid Sans Mono, Segoe UI Mono,"Apple Color Emoji","Android Emoji","Segoe UI Emoji",Symbola; }
 input, button {
 	background: transparent;
