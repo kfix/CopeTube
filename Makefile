@@ -12,7 +12,7 @@ $(REPO).app: $(MacPin)/Makefile browser/$(REPO)/
 	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
-browser/%/: icon.png macpin.js index.html css fonts app lib
+browser/%/: icon*.png macpin.js index.html pwa_manifest.json css fonts app lib
 	install -d $@
 	for i in $+; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 	touch $@
