@@ -12,17 +12,20 @@ $(REPO).app: $(MacPin)/Makefile browser/$(REPO)/
 	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
-browser/%/: icon*.png macpin.js index.html pwa_manifest.json css fonts app lib
+browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons
 	install -d $@
 	for i in $+; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 	touch $@
 
-gh-pages: browser/$(REPO)/
-	cp -RL $</* dist/$@
-	cd dist/$@; git add *; git commit; git push origin HEAD:$@
-	git add dist/$@
-	git commit
-	git push
+dist/.git:
+	git worktree add dist gh-pages
+
+gh-pages: browser/$(REPO)/ dist/.git
+	cp -RL $</* dist/
+	cd dist/; \
+		git add --all; \
+		git commit -m "Deploy to gh-pages"; \
+		git push origin gh-pages
 
 test: index.html
 	open $<
@@ -37,7 +40,7 @@ install: $(REPO).app
 	cp -R $< ~/Applications
 
 clean:
-	-rm -rf browser build.* *.app
+	-rm -rf browser *.app dist/*
 
 tag:
 	git tag -f -a v$(VERSION) -m 'release $(VERSION)'
@@ -59,4 +62,4 @@ release:
 endif
 
 .PRECIOUS: build/%
-.PHONY: clean all test test.app test.chrome gh_pages
+.PHONY: clean all test test.app test.chrome gh-pages
