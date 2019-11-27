@@ -9,10 +9,25 @@
 	src: local(Y14.5M-2009);
 	src: url(../fonts/Y14.5M-2009.ttf);
 }
+/* http://www.fontspace.com/micronus/y145m-2009 */
 
-#CopeTubeApp, #CopeTubeDemo { column-width: 200px; }
+@font-face {
+	font-family: osifont;
+	src: local(osifont-2014);
+	src: url(../fonts/osifont-2014.ttf);
+}
+/* https://github.com/hikikomori82/osifont */
+
+#CopeTubeApp, #CopeTubeDemo { column-width: 150px; columns: 2; }
 #template, #visualization, #controls { column-span: none; vertical-align: top; }
-label, output, input, option, button { font-family: Monaco,Droid Sans Mono, Segoe UI Mono,"Apple Color Emoji","Android Emoji","Segoe UI Emoji",Symbola; }
+label, output, input, option, button, :not(svg) > text {
+	font-size: 10pt;
+	font-family: osifont,"Apple Color Emoji","Android Emoji","Segoe UI Emoji";
+}
+svg > text {
+	font-size: 9pt;
+	font-family: Y14M, osifont,"Apple Color Emoji","Android Emoji","Segoe UI Emoji";
+}
 input, button {
 	background: transparent;
 	border: 0;
@@ -36,9 +51,6 @@ svg { overflow: visible; }
 	https://code.google.com/p/chromium/issues/detail?id=62435 */
 .wingding { font-family: webdings; }
 /* text { font-family: futura; font-style: italic; font-variant: small-caps; } */
-text { font-family: Y14M,osifont; }
-	/* http://www.fontspace.com/micronus/y145m-2009 */
-	/* https://github.com/hikikomori82/osifont */
 .cope_vbox { margin-left: 0; margin-top: 0; }
 .cope { stroke: black; vector-effect: non-scaling-stroke; stroke-width: 1px; }
 .cope_bbox { stroke: green; vector-effect: non-scaling-stroke; stroke-width: 1px; }
