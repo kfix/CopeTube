@@ -1,0 +1,42 @@
+CopeTubeDemo {
+	display: grid;
+	grid-auto-columns: max-content;
+	grid-gap: 10px;
+	grid-template-areas: "a b";
+}
+#template, #visualization, #controls { column-span: none; vertical-align: top; }
+label, output, input, option, button, :not(svg) > text {
+	font-size: 10pt;
+	font-family: osifont,"Apple Color Emoji","Android Emoji","Segoe UI Emoji";
+}
+input, button {
+	background: transparent;
+	border: 0;
+	border-style: none;
+	border-color: transparent;
+	outline: none;
+	outline-offset: 0;
+	box-shadow: none;
+}
+input:focus, button:focus {
+	outline: groove;
+	border-color: lightblue;
+}
+input[type=text] { width: 6em; }
+input[type=number] {
+	width: 3em;
+	-moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+/*
+input[type="range"] {
+  writing-mode: bt-lr;
+  -webkit-appearance: slider-vertical;
+  transform: rotate(-45deg);
+  transform-origin: 0px 0px;
+}
+*/

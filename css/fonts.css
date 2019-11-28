@@ -1,0 +1,19 @@
+@font-face {
+	font-family: Symbola;
+	src: local(Symbola);
+	src: url(../fonts/Symbola.ttf);
+}
+
+@font-face {
+	font-family: Y14M;
+	src: local(Y14.5M-2009);
+	src: url(../fonts/Y14.5M-2009.ttf);
+}
+/* http://www.fontspace.com/micronus/y145m-2009 */
+
+@font-face {
+	font-family: osifont;
+	src: local(osifont-2014);
+	src: url(../fonts/osifont-2014.ttf);
+}
+/* https://github.com/hikikomori82/osifont */
