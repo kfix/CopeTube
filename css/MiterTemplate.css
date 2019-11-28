@@ -1,62 +1,8 @@
-@font-face {
-	font-family: Symbola;
-	src: local(Symbola);
-	src: url(../fonts/Symbola.ttf);
-}
-
-@font-face {
-	font-family: Y14M;
-	src: local(Y14.5M-2009);
-	src: url(../fonts/Y14.5M-2009.ttf);
-}
-/* http://www.fontspace.com/micronus/y145m-2009 */
-
-@font-face {
-	font-family: osifont;
-	src: local(osifont-2014);
-	src: url(../fonts/osifont-2014.ttf);
-}
-/* https://github.com/hikikomori82/osifont */
-
-#CopeTubeApp, #CopeTubeDemo {
-	display: grid;
-	grid-auto-columns: max-content;
-	grid-gap: 10px;
-	grid-template-areas: "a b";
-}
-#template, #visualization, #controls { column-span: none; vertical-align: top; }
-label, output, input, option, button, :not(svg) > text {
-	font-size: 10pt;
-	font-family: osifont,"Apple Color Emoji","Android Emoji","Segoe UI Emoji";
-}
+svg { overflow: visible; }
 svg > text {
 	font-size: 9pt;
 	font-family: Y14M, osifont,"Apple Color Emoji","Android Emoji","Segoe UI Emoji";
 }
-input, button {
-	background: transparent;
-	border: 0;
-	border-style: none;
-	border-color: transparent;
-	outline: none;
-	outline-offset: 0;
-	box-shadow: none;
-}
-input:focus, button:focus {
-	outline: groove;
-	border-color: lightblue;
-}
-input[type=text] { width: 6em; }
-input[type=number] {
-	width: 3em;
-	-moz-appearance:textfield;
-}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-}
-svg { overflow: visible; }
 .miterTemplate { border: 1px solid red; }
 /* .emoji { font-family: Symbola,"Open Sans Emoji","Apple Color Emoji","Android Emoji","Segoe UI Emoji"; } */
 /* https://github.com/MorbZ/OpenSansEmoji */

@@ -1,0 +1,60 @@
+CopeTubeDemo {
+	display: grid;
+	grid-auto-columns: min-content;
+	grid-gap: 15px;
+	grid-template-areas: "a b";
+}
+#template, #visualization, #controls { column-span: none; vertical-align: top; }
+label, output, input, option, button, :not(svg) > text {
+	font-size: 10pt;
+	font-family: osifont,"Apple Color Emoji","Android Emoji","Segoe UI Emoji";
+}
+input, button {
+	background: transparent;
+	border: 0;
+	border-style: none;
+	border-color: transparent;
+	outline: none;
+	outline-offset: 0;
+	box-shadow: none;
+}
+input:focus, button:focus {
+	outline: groove;
+	border-color: lightblue;
+}
+input[type=text] { width: 5em; }
+input[type=number] {
+	width: 2em;
+	-moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type=range]:focus {
+	outline: none;
+	cursor: grab;
+}
+
+#tilter {
+    transform-origin: left top;
+	transform: rotate(calc(var(--miter-degs) * -1));
+	/* ugh, not the same as <svg>'s rotate()!
+	 * https://drafts.csswg.org/css-transforms-2/#individual-transforms
+	 * https://chrisruppel.com/blog/css-transforms-level2-translate-scale-rotate/ */
+	position: relative;
+	top: -90px;
+	left: 8px;
+	overflow: hidden;
+}
+#tilter input {
+	width: 75px;
+	height: 80px;
+	cursor: grab;
+}
+
+#tilter input[type=range] {
+	-webkit-appearance: none;
+}
