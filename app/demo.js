@@ -69,9 +69,14 @@ let Demo = {
 		};
 	},
 	computed: {
-		unitSymbol: function () {
+		unitSymbol() {
 			return UNITS[this.units].unitSymbol;
-		} // does this pass to sub-components' props?
+		}, // does this pass to sub-components' props?
+		cv_angle() {
+			return {
+				"--miter-degs": `${this.miter.angle}deg`,
+			}
+		}
 	},
 	watch: {
 		units: function (to, from) {
@@ -113,8 +118,9 @@ let Demo = {
 				</body>
 				</html>
 			`);
-		}
+		},
 		// zoomToScale()
+		// addToSheet()
 		// lockPointer()
 		// howTo()
 	},
@@ -125,26 +131,23 @@ let Demo = {
 					<label>⦦</label><input type="text" v-model="miter.joinTitle" />
 
 					<label>⌀</label>
-						<input type="number" min="0.1" max="4.0" step="0.1" inputmode="numeric" v-model="miter.joinOD" />
+						<input type="number" min="0.1" max="4.0" step="0.1" inputmode="decimal" v-model="miter.joinOD" />
 					<label>{{unitSymbol}}◎</label>
 					<br />
 
 					<label>⦣⦢</label>
 						<input type="text" v-model="miter.cutTitle" />
 					<label>⌀</label>
-						<input type="number" min="0.1" max="4.0" step="0.1" inputmode="numeric" v-model="miter.cutOD" />
+						<input type="number" min="0.1" max="4.0" step="0.1" inputmode="decimal" v-model="miter.cutOD" />
 					<label>{{unitSymbol}}⋎</label>
 					<br />
 
-					<label>⟀</label>
-						<input type="number" min="0.0" max="45" step="any" inputmode="numeric" v-model="miter.angle" />
-					<label>°</label>
-					<br />
-
 					<label>offset:  </label>
-						<input type="number" min="0.0" max="4.0" step="0.1" inputmode="numeric" v-model="miter.offset" />
-						<input type="range" min="0.0" max="45" step="0.5" v-model="miter.angle" />
+						<input type="number" min="0.0" max="4.0" step="0.1" inputmode="decimal" v-model="miter.offset" />
 					<label>{{unitSymbol}}</label>
+					<label>⟀</label>
+						<input type="number" min="0.0" max="45" step="any" inputmode="decimal" v-model="miter.angle" />
+					<label>°</label>
 					<br />
 
 					<label>southpaw:  </label><input type="checkbox" v-model="miter.southpaw" />
@@ -164,26 +167,14 @@ let Demo = {
 			</div>
 			<div id='visualization'>
 				<JointModel v-bind="{...miter, ...currentUnit(), ...currentLayout()}" />
+					<div id="tilter" :style="cv_angle">
+						<input type="range" min="0" max="45" step="0.5" v-model="miter.angle" />
+					</div>
 			</div>
 			<div id='template'>
 				<MiterTemplate v-bind="{...miter, ...currentUnit(), ...currentLayout()}" />
 			</div>
-		</CopeTubeDemo>`.replace(/>\s+</g,'><')
-		/*
-				<input type="range" style="transform: rotate(-45deg)" list="tickmarks" min="0" max="45" step="0.5" v-model="miter.angle" />
-				<datalist id="tickmarks">
-					<option value="0"></option>
-					<option value="5"></option>
-					<option value="10"></option>
-					<option value="15"></option>
-					<option value="20"></option>
-					<option value="25"></option>
-					<option value="30"></option>
-					<option value="35"></option>
-					<option value="40"></option>
-					<option value="45"></option>
-				</datalist>
-		*/
+		</CopeTubeDemo>`.replace(/([^>])\s+([$<])/g,'$1$2')
 };
 
 function showDemo(el) {
