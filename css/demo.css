@@ -1,4 +1,12 @@
+body {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	position: fixed;
+}
+
 CopeTubeDemo {
+	overflow: auto;
 	display: grid;
 	grid-auto-columns: min-content;
 	grid-gap: 15px;
