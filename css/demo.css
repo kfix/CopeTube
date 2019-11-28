@@ -8,6 +8,7 @@ body {
 
 CopeTubeDemo {
 	overflow: auto;
+	overflow-x: hidden;
 	display: grid;
 	grid-auto-columns: min-content;
 	grid-gap: 15px;
