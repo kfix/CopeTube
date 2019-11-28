@@ -42,7 +42,13 @@ input[type=number]::-webkit-outer-spin-button {
 	-webkit-appearance: none;
 	margin: 0;
 }
-
+input[type=color] {
+	width: 40px;
+}
+select {
+	-webkit-appearance: none;
+	border: none;
+}
 input[type=range]:focus {
 	outline: none;
 	cursor: grab;

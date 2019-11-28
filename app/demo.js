@@ -16,7 +16,7 @@ let UNITS = {
 }
 
 let LAYOUTS = {
-	"dymo-sticky-address": {
+	"dymo-1x3.5in": {
 		"in": {
 			width: 1.125,
 			height: 3.5,
@@ -30,7 +30,7 @@ let LAYOUTS = {
 			fromTop: 2.54
 		}
 	},
-	"letter": {
+	"US-letter": {
 		"in": {
 			width: 8.5,
 			height: 11,
@@ -65,7 +65,7 @@ let Demo = {
 				southpaw: false
 			},
 			units: "in",
-			layout: "dymo-sticky-address"
+			layout: "dymo-1x3.5in"
 		};
 	},
 	computed: {
@@ -118,6 +118,11 @@ let Demo = {
 				</body>
 				</html>
 			`);
+			/*
+			 * a 2nd attempt to print on iOS (after cancelling 1st) flashes:
+			 *   "this website has been blocked from automatically printing"
+			 *   have to disable Settings->Safari->Pop-up Blocker
+			 */
 		},
 		// zoomToScale()
 		// addToSheet()
@@ -155,14 +160,13 @@ let Demo = {
 					<input type="radio" v-for="name in allUnits()" v-model="units" :value="name" />
 					<br />
 
-					<label>layout:</label><select v-model="layout">
+					<label>media:</label><select v-model="layout">
 						<option v-for="name in allLayouts()" v-bind:value="name">{{name}}</option>
 					</select>
 					<br />
 
 					<input type="color" v-model="miter.cutColor" />
 					<input type="color" v-model="miter.keepColor" />
-					<button id="print" @click="printTemplate">Print</button>
 				</form>
 			</div>
 			<div id='visualization'>

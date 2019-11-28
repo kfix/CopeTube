@@ -1,4 +1,4 @@
-svg { overflow: visible; }
+svg { overflow: hidden; } /* clips the graph when it exceeds the top svng */
 svg > text {
 	font-size: 9pt;
 	font-family: Y14M, osifont,"Apple Color Emoji","Android Emoji","Segoe UI Emoji";
