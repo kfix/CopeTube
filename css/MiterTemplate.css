@@ -35,6 +35,8 @@ flip { display: inline-block; -webkit-transform: scale(-1,-1); }
 .previewCope { stroke: black; vector-effect: non-scaling-stroke; stroke-width: 1px; }
 .previewAnglePull {
 	cursor: grab;
+	height: 100px;
+	width: 100px;
 }
 .previewAnglePull[type=range]:focus {
 	outline: none;
