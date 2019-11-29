@@ -45,3 +45,5 @@ flip { display: inline-block; -webkit-transform: scale(-1,-1); }
 .previewAnglePull[type=range] {
 	-webkit-appearance: none;
 }
+
+.previewGauge { stroke: black; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
