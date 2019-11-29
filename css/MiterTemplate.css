@@ -1,6 +1,6 @@
-svg { overflow: hidden; } /* clips the graph when it exceeds the top svng */
+svg { overflow: visible; }
 svg > text {
-	font-size: 9pt;
+	font-size: 10pt;
 	font-family: Y14M, osifont,"Apple Color Emoji","Android Emoji","Segoe UI Emoji";
 }
 .miterTemplate { border: 1px solid red; }
@@ -33,3 +33,13 @@ flip { display: inline-block; -webkit-transform: scale(-1,-1); }
 .previewCutTube { stroke: black; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
 .previewLabel { stroke: red; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
 .previewCope { stroke: black; vector-effect: non-scaling-stroke; stroke-width: 1px; }
+.previewAnglePull {
+	cursor: grab;
+}
+.previewAnglePull[type=range]:focus {
+	outline: none;
+	cursor: grab;
+}
+.previewAnglePull[type=range] {
+	-webkit-appearance: none;
+}
