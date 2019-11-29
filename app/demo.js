@@ -235,7 +235,8 @@ let Demo = {
 				</select>
 			</div>
 			<div id='visualization'>
-				<JointModel v-bind="{...miter, ...currentUnit, ...currentLayout}" />
+				<JointModel v-bind="{...miter, ...currentUnit, ...currentLayout}"
+				v-on:angleChanged="miter.angle = $event" />
 			</div>
 		</CopeTubeUI>
 		<div id='template'>
