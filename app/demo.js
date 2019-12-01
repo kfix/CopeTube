@@ -52,6 +52,7 @@ let LAYOUTS = {
 
 // http://screensiz.es/
 // https://pixensity.com
+// https://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions
 let DEVICE_PPIS = new Map([
 	[96.00, [
 		"default"
@@ -93,14 +94,12 @@ let DEVICE_PPIS = new Map([
 	[364.38, [
 		"iPhone 7"
 	]],
-	[400.53, [
-		"iPhone 6/6S/7/8 Plus"
-	]],
 	[455.55, [
 		"iPhone XS Max",
 		"iPhone 11 Pro Max"
 	]],
 	[462.63, [
+		"iPhone 6/6S/7/8 Plus", /* Pluses expose a fake 3x dppx then downsamples 15% to their real dpi (401) */
 		"iPhone X/XS",
 		"iPhone 11 Pro"
 	]]
