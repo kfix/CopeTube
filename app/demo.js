@@ -105,7 +105,9 @@ let Demo = {
 				<html>
 					<head>
 					<title>print CopeTube template</title>
+					<link rel="stylesheet" type="text/css" href="css/fonts.css" />
 					<link rel="stylesheet" type="text/css" href="css/MiterTemplate.css" />
+					<link rel="stylesheet" type="text/css" media="print" href="css/print.css" />
 					<!-- FIXME: prop for css src/href -->
 				</head>
 				<body>
@@ -145,6 +147,8 @@ let Demo = {
 			// https://www.quirksmode.org/m/tests/widthtest.html
 			//
 			// https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards
+			// https://www.ginifab.com/feeds/cm_to_inch/actual_size_ruler.html
+			// https://crashcourse.housegordon.org/D3JS-Absolute-Units.html
 			
 			let dppx = window.devicePixelRatio;
 			let scr = window.screen;
@@ -211,13 +215,13 @@ let Demo = {
 				<span>
 				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
 					min="0.0" v-bind:max="miter.cutOD" v-bind:step="currentUnit.stepping"
-					v-model.number="miter.offset" @input="formatSize" title="x-offset of notch into coped tube" />
+					v-model.number="miter.offset" @input="formatSize" title="offset of tube centerlines" />
 				<label class="units">{{unitSymbol}}</label>
 	
 				<label class="units">⟀</label>
 				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
 					min="0.0" max="75" step="any"
-					v-model.number="miter.angle" @input="formatSize" title="angle of intersection" />
+					v-model.number="miter.angle" @input="formatSize" title="inclination angle of joint" />
 				<label class="units">°</label>
 				</span>
 				<br />
