@@ -17,7 +17,7 @@ let UNITS = {
 		unitName: "Millimeters",
 		unitSymbol: "㎜"
 	}
-}
+};
 
 let LAYOUTS = {
 	"dymo-1x3.5in": {
@@ -48,7 +48,62 @@ let LAYOUTS = {
 			fromTop: 12.7
 		}
 	}
-}
+};
+
+// http://screensiz.es/
+// https://pixensity.com
+let DEVICE_PPIS = {
+	"96": [
+		"default"
+	],
+	"113.49": [
+		"MacBook Pro 13 (early 2012)"
+	],
+	"127.68": [
+		'MacBook Air 13" (2012-13)'
+	],
+	"135.09": [
+		'MacBook Air 11" (2013)'
+	],
+	"220.53": [
+		'MacBook Pro 15" Retina'
+	],
+	"226.42": [
+		"MacBook 2015"
+	],
+	"226.98": [
+		'MacBook Pro 13" (2012-17)'
+	],
+	"264": [
+		"iPad Air 2",
+		"iPad (2018)"
+	],
+	"323.61": [
+		"Apple iPhone 11",
+		"Apple iPhone XR"
+	],
+	"325.61": [
+		"iPhone 6/6S"
+	],
+	"325.97": [
+		"iPad mini Retina/2/3/4/5",
+		"iPhone 5/5S/SE"
+	],
+	"364.38": [
+		"iPhone 7"
+	],
+	"400.53": [
+		"iPhone 6/6S/7/8 Plus"
+	],
+	"455.55": [
+		"iPhone XS Max",
+		"iPhone 11 Pro Max"
+	],
+	"462.63": [
+		"iPhone X/XS",
+		"iPhone 11 Pro"
+	]
+};
 
 let Demo = {
 	components: {
@@ -59,6 +114,7 @@ let Demo = {
 		return {
 			UNITS,
 			LAYOUTS,
+			DEVICE_PPIS,
 			miter: {
 				angle: 17,
 				cutOD: 1,
@@ -71,6 +127,7 @@ let Demo = {
 				southpaw: false
 			},
 			units: "in",
+			device_ppi: 96,
 			layout: "dymo-1x3.5in"
 		};
 	},
@@ -105,7 +162,9 @@ let Demo = {
 				<html>
 					<head>
 					<title>print CopeTube template</title>
+					<link rel="stylesheet" type="text/css" href="css/fonts.css" />
 					<link rel="stylesheet" type="text/css" href="css/MiterTemplate.css" />
+					<link rel="stylesheet" type="text/css" media="print" href="css/print.css" />
 					<!-- FIXME: prop for css src/href -->
 				</head>
 				<body>
@@ -117,17 +176,12 @@ let Demo = {
 				</body>
 				</html>
 			`);
-			/*
-			 * a 2nd attempt to print on iOS (after cancelling 1st) flashes:
-			 *   "this website has been blocked from automatically printing"
-			 *   have to disable Settings->Safari->Pop-up Blocker
-			 */
 		},
 		// zoomToScale()
 		// addToSheet()
 		// lockPointer()
 		// howTo()
-		realSize(size) {
+		getDevicePPI(size) {
 			// CSS unit sizes are hogwash
 			//  std-body is saying "cantfix-so-wontspec",
 			//  browsers are saying "notspec-so-wontfix"
@@ -145,10 +199,11 @@ let Demo = {
 			// https://www.quirksmode.org/m/tests/widthtest.html
 			//
 			// https://en.wikipedia.org/wiki/Dots_per_inch#Computer_monitor_DPI_standards
+			// https://www.ginifab.com/feeds/cm_to_inch/actual_size_ruler.html
+			// https://crashcourse.housegordon.org/D3JS-Absolute-Units.html
 			
 			let dppx = window.devicePixelRatio;
 			let scr = window.screen;
-			// api for ppi? http://screensiz.es/iphone-6-2
 			//   NONE in WebStandards!!
 			//  https://github.com/marchv/UIScreenExtension  *hardcodes* -_-
 			//     Safari window.navigator doesn't expose iThing model #s
@@ -157,25 +212,12 @@ let Demo = {
 			//
 			//  so we need a "density correction factor" input/slider that must be
 			//  crosschecked with a real ruler
-			//  FWIW, my non-Retina MBA displays to true physical size
-			//      should save the value to localStorage
-
-			switch (this.units) {
-				case "mm":
-					//return size * (window.devicePixelRatio *);
-					// phys pixels : CSS pixels
-					// 96 CSS px == 1 CSS "in" == 72 CSS pt
-					break;
-				case "in":
-					//return size * (window.devicePixelRatio *);
-					break;
-			}
 		},
 		formatSize(event) {
 			/* shrinks input fields to fit their contents */
 			// https://vuejs.org/v2/guide/components.html#Using-v-model-on-Components
 			// https://www.smashingmagazine.com/2017/08/creating-custom-inputs-vue-js/
-			const value = event.target.value;
+			const value = event.target.label;
 			this.$emit('input', value);
 			let len = (value.lenth > 4) ? 4 : value.length;
 			event.target.size = len;
@@ -211,36 +253,42 @@ let Demo = {
 				<span>
 				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
 					min="0.0" v-bind:max="miter.cutOD" v-bind:step="currentUnit.stepping"
-					v-model.number="miter.offset" @input="formatSize" title="x-offset of notch into coped tube" />
+					v-model.number="miter.offset" @input="formatSize" title="offset of tube centerlines" />
 				<label class="units">{{unitSymbol}}</label>
 	
 				<label class="units">⟀</label>
 				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
 					min="0.0" max="75" step="any"
-					v-model.number="miter.angle" @input="formatSize" title="angle of intersection" />
+					v-model.number="miter.angle" @input="formatSize" title="inclination angle of joint" />
 				<label class="units">°</label>
 				</span>
 				<br />
 
-				<button v-on:click="miter.southpaw = !miter.southpaw"
+				<button v-on:click="miter.southpaw = !miter.southpaw" :style="{width: '6.5ch'}"
 					title="click to invert filing orientation">{{(miter.southpaw) ? "lefty" : "righty"}}</button>
-				<button v-on:click="units = (units == 'in') ? 'mm' : 'in'"
+				<button v-on:click="units = (units == 'in') ? 'mm' : 'in'" :style="{width: '3.5ch'}"
 					title="click to change units">{{units}}</button>
+				<select v-model.number="device_ppi" title="choose viewing device's DPI" :style="{width: '9ch'}">
+					<optgroup v-for="(devices, ppi) in this.DEVICE_PPIS" label="----">
+						<option v-bind:value="ppi">{{ppi}} dpi</option>
+						<option v-for="device in devices" :value="ppi">{{device}}</option>
+					</optgroup>
+				</select>
 				<br />
 
 				<button onclick="window.print()" title="inline printer">🖨</button>
 				<button v-on:click="printTemplate()" title="pop-up printer">🖨</button>
-				<select v-model="layout" title="choose paper size (red box shows its bounds)">
+				<select v-model="layout" title="choose paper size (red box shows its bounds)" @input="formatSize"> 
 					<option v-for="(value, name) in this.LAYOUTS" v-bind:value="name">{{name}}</option>
 				</select>
 			</div>
 			<div id='visualization'>
-				<JointModel v-bind="{...miter, ...currentUnit, ...currentLayout}"
+				<JointModel v-bind="{...miter, ...currentUnit, ...currentLayout, device_ppi}"
 				v-on:angleChanged="miter.angle = $event" />
 			</div>
 		</CopeTubeUI>
 		<div id='template'>
-			<MiterTemplate v-bind="{...miter, ...currentUnit, ...currentLayout}" />
+			<MiterTemplate v-bind="{...miter, ...currentUnit, ...currentLayout, device_ppi}" />
 		</div>
 	</CopeTubeDemo>`.replace(/([^>])\s+([$<])/g,'$1$2')
 };
@@ -252,7 +300,8 @@ function showDemo(el) {
 	let app = new Vue({
 		data: {
 			UNITS,
-			LAYOUTS
+			LAYOUTS,
+			DEVICE_PPIS
 		},
 		render: h => h(Demo),
 	})

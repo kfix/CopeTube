@@ -1,5 +1,5 @@
 input, label, button,
 form, select, option,
-#visualization {
+#visualization, .sizeGauge {
 	display: none;
 }

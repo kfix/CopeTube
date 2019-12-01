@@ -8,6 +8,15 @@ svg > text {
 /* https://github.com/MorbZ/OpenSansEmoji */
 /* no support for 32-bit rgb *Emoji fonts in PhantomJS yet, see:
 	https://code.google.com/p/chromium/issues/detail?id=62435 */
+
+@media not print {
+	.miterTemplate {
+		transform-origin: top left;
+		transform:
+			scaleX(var(--ppi-scale-factor,0))
+			scaleY(var(--ppi-scale-factor,0))
+	}
+}
 .wingding { font-family: webdings; }
 /* text { font-family: futura; font-style: italic; font-variant: small-caps; } */
 .cope_vbox { margin-left: 0; margin-top: 0; }
