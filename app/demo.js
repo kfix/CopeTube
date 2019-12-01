@@ -109,28 +109,28 @@ let DEVICE_PPIS = new Map([
 function narrowPPIs() {
 	// do some heuristics so we don't present more DPI
 	//   choices than we have to
-	let filter, filter2;
+	let filters = ["default"]
+	let blocks = []
 
 	if (navigator.userAgent.includes("Macintosh")) {
-		filter = "MacBook";
-		filter2 = "iPad";
+		filters.push("MacBook", "iPad");
 		// full-screen iPadOS 13 lies and says its x86 macOS
 	} else if (navigator.userAgent.includes("iPhone")) {
-		filter = "iPhone";
+		filters.push("iPhone");
 	} else if (navigator.userAgent.includes("iPad")) {
-		filter = "iPad";
+		filters.push("iPad");
 	} else if (navigator.userAgent.includes("iPod touch")) {
-		filter = "iPod";
+		filters.push("iPod");
 	} else {
-		return;
+		blocks.push("iPod", "iPad", "iPhone", "MacBook");
 	}
 
 	for (const [ppi, devices] of DEVICE_PPIS) {
 		let new_devices = devices.filter(
-			device =>
-				device == "default" ||
-				device.includes(filter) ||
-				device.includes(filter2)
+			device => (
+				filters.some( filter => device.includes(filter) ) &&
+				blocks.every( block => (! device.includes(block)) )
+			)
 		);
 		if (new_devices.length == 0) {
 			DEVICE_PPIS.delete(ppi);
