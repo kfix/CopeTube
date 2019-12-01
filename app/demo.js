@@ -52,58 +52,88 @@ let LAYOUTS = {
 
 // http://screensiz.es/
 // https://pixensity.com
-let DEVICE_PPIS = {
-	"96": [
+let DEVICE_PPIS = new Map([
+	["96.00", [
 		"default"
-	],
-	"113.49": [
+	]],
+	["113.49", [
 		"MacBook Pro 13 (early 2012)"
-	],
-	"127.68": [
+	]],
+	["127.68", [
 		'MacBook Air 13" (2012-13)'
-	],
-	"135.09": [
+	]],
+	["135.09", [
 		'MacBook Air 11" (2013)'
-	],
-	"220.53": [
+	]],
+	["220.53", [
 		'MacBook Pro 15" Retina'
-	],
-	"226.42": [
+	]],
+	["226.42", [
 		"MacBook 2015"
-	],
-	"226.98": [
+	]],
+	["226.98", [
 		'MacBook Pro 13" (2012-17)'
-	],
-	"264": [
+	]],
+	["264.00", [
 		"iPad Air 2",
 		"iPad (2018)"
-	],
-	"323.61": [
+	]],
+	["323.61", [
 		"Apple iPhone 11",
 		"Apple iPhone XR"
-	],
-	"325.61": [
+	]],
+	["325.61", [
 		"iPhone 6/6S"
-	],
-	"325.97": [
+	]],
+	["325.97", [
 		"iPad mini Retina/2/3/4/5",
-		"iPhone 5/5S/SE"
-	],
-	"364.38": [
+		"iPhone 5/5S/SE",
+		"iPod touch 4/5/6/7 (2010-2019)"
+	]],
+	["364.38", [
 		"iPhone 7"
-	],
-	"400.53": [
+	]],
+	["400.53", [
 		"iPhone 6/6S/7/8 Plus"
-	],
-	"455.55": [
+	]],
+	["455.55", [
 		"iPhone XS Max",
 		"iPhone 11 Pro Max"
-	],
-	"462.63": [
+	]],
+	["462.63", [
 		"iPhone X/XS",
 		"iPhone 11 Pro"
-	]
-};
+	]]
+]);
+
+function narrowPPIs() {
+	// do some heuristics so we don't present more DPI
+	//   choices than we have to
+	let filter;
+
+	if (navigator.userAgent.includes("Macintosh")) {
+		filter = "MacBook";
+	} else if (navigator.userAgent.includes("iPhone")) {
+		filter = "iPhone";
+	} else if (navigator.userAgent.includes("iPad")) {
+		filter = "iPad";
+	} else if (navigator.userAgent.includes("iPod touch")) {
+		filter = "iPod";
+	} else {
+		return;
+	}
+
+	for (const [ppi, devices] of DEVICE_PPIS) {
+		let new_devices = devices.filter( device => device.includes(filter) );
+		if (new_devices.length == 0) {
+			DEVICE_PPIS.delete(ppi);
+		} else {
+			DEVICE_PPIS.set(ppi, new_devices);
+		}
+	}
+
+	return DEVICE_PPIS;
+}
 
 let Demo = {
 	components: {
@@ -269,9 +299,9 @@ let Demo = {
 				<button v-on:click="units = (units == 'in') ? 'mm' : 'in'" :style="{width: '3.5ch'}"
 					title="click to change units">{{units}}</button>
 				<select v-model.number="device_ppi" title="choose viewing device's DPI" :style="{width: '9ch'}">
-					<optgroup v-for="(devices, ppi) in this.DEVICE_PPIS" label="----">
-						<option v-bind:value="ppi">{{ppi}} dpi</option>
-						<option v-for="device in devices" :value="ppi">{{device}}</option>
+					<optgroup v-for="(map,idx) in DEVICE_PPIS" label="----">
+						<option v-bind:value="map[0]">{{map[0]}} dpi</option>
+						<option v-for="(device) in map[1]" :value="map[0]">{{device}}</option>
 					</optgroup>
 				</select>
 				<br />
@@ -301,7 +331,7 @@ function showDemo(el) {
 		data: {
 			UNITS,
 			LAYOUTS,
-			DEVICE_PPIS
+			DEVICE_PPIS: Array.from(narrowPPIs()) // https://github.com/vuejs/vue/issues/2410
 		},
 		render: h => h(Demo),
 	})
