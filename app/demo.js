@@ -99,7 +99,8 @@ let DEVICE_PPIS = new Map([
 		"iPhone 11 Pro Max"
 	]],
 	[462.63, [
-		"iPhone 6/6S/7/8 Plus", /* Pluses expose a fake 3x dppx then downsamples 15% to their real dpi (401) */
+		"iPhone 6/6S/7/8 Plus", /* Pluses expose a fake 3x dppx then downsamples 13% to their real dpi (401) */
+		/* https://oleb.net/blog/2014/11/iphone-6-plus-screen/ */
 		"iPhone X/XS",
 		"iPhone 11 Pro"
 	]]
