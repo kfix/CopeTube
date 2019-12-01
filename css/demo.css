@@ -13,6 +13,8 @@ CopeTubeUI {
 	grid-auto-columns: max-content;
 	grid-gap: 15px;
 	grid-template-areas: "a b";
+	user-select: none;
+	-webkit-user-select: none;
 }
 #template, #visualization, #controls { column-span: none; vertical-align: top; }
 select, label, output, input, option, button, :not(svg) > text {
