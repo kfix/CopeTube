@@ -5,6 +5,7 @@ import MiterTemplate from '../lib/MiterTemplate.js';
 let UNITS = {
 	"in": {
 		maxOD: "4.0",
+		maxGauge: "0.25",
 		stepping: "0.1",
 		units: "in",
 		unitName: "Inches",
@@ -12,6 +13,7 @@ let UNITS = {
 	},
 	"mm": {
 		maxOD: "90.0",
+		maxGauge: "4.00",
 		stepping: "0.5",
 		units: "mm",
 		unitName: "Millimeters",
@@ -155,6 +157,7 @@ let Demo = {
 			miter: {
 				angle: 17,
 				cutOD: 1,
+				cutGauge: 0.0,
 				cutTitle: "TopTube",
 				cutColor: colorToHex("lightgrey"),
 				joinOD: 1,
@@ -289,10 +292,15 @@ let Demo = {
 
 				<span>
 				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
+					min="0.00" v-bind:max="currentUnit.maxGauge" v-bind:step="currentUnit.stepping"
+					v-model.number="miter.cutGauge" title="gauge (wall thickness) of coped tube" />
+				<label class="units">{{unitSymbol}}</label>
+
+				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
 					min="0.0" v-bind:max="miter.cutOD" v-bind:step="currentUnit.stepping"
 					v-model.number="miter.offset" @input="formatSize" title="offset of tube centerlines" />
 				<label class="units">{{unitSymbol}}</label>
-	
+
 				<label class="units">⟀</label>
 				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
 					min="0.0" max="75" step="any"
