@@ -12,7 +12,10 @@ $(REPO).app: $(MacPin)/Makefile browser/$(REPO)/
 	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
-browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons
+vue.js:
+	wget -O vue.js https://cdn.jsdelivr.net/npm/vue
+
+browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons vue.js
 	install -d $@
 	for i in $+; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 	touch $@
@@ -31,6 +34,8 @@ test: index.html
 	open $<
 test.chrome: index.html
 	(open -a "Google Chrome.app" file://$(PWD)/$< --args '--disable-web-security' '--user-data-dir=' '--allow-file-access-from-files')
+test.ff: index.html
+	# security.fileuri.strict_origin_policy=false
 test.macpin: index.html
 	(open -a MacPin.app --args -i file://$(PWD)/$<)
 test.app: $(REPO).app/Contents/MacOS/$(REPO)
