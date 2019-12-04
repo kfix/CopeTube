@@ -1,9 +1,11 @@
-body {
-	height: 100%;
-	width: 100%;
-	overflow: hidden;
-	overflow-x: hidden;
-	position: fixed;
+@media not print {
+	body {
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
+		overflow-x: hidden;
+		position: fixed;
+	}
 }
 
 CopeTubeUI {
@@ -16,6 +18,7 @@ CopeTubeUI {
 	user-select: none;
 	-webkit-user-select: none;
 }
+
 #template, #visualization, #controls { column-span: none; vertical-align: top; }
 select, label, output, input, option, button, :not(svg) > text {
 	font-size: 10pt;

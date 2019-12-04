@@ -99,7 +99,8 @@ let DEVICE_PPIS = new Map([
 		"iPhone 11 Pro Max"
 	]],
 	[462.63, [
-		"iPhone 6/6S/7/8 Plus", /* Pluses expose a fake 3x dppx then downsamples 15% to their real dpi (401) */
+		"iPhone 6/6S/7/8 Plus", /* Pluses expose a fake 3x dppx then downsamples 13% to their real dpi (401) */
+		/* https://oleb.net/blog/2014/11/iphone-6-plus-screen/ */
 		"iPhone X/XS",
 		"iPhone 11 Pro"
 	]]
@@ -265,7 +266,7 @@ let Demo = {
 		<CopeTubeUI>
 			<div id='controls'>
 				<span>
-				<input type="color" v-model="miter.cutColor" title="color of uncut tube" />
+				<input type="color" v-model="miter.keepColor" title="color of uncut tube" />
 				<input type="text" v-model.trim="miter.joinTitle" @input="formatSize" title="name of uncut tube" />
 				<label class="units">⌀</label>
 				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
@@ -276,7 +277,7 @@ let Demo = {
 				<br />
 
 				<span>
-				<input type="color" v-model="miter.keepColor" title="color of coped tube"  />
+				<input type="color" v-model="miter.cutColor" title="color of coped tube"  />
 				<input type="text" v-model.trim="miter.cutTitle" @input="formatSize" title="name of coped tube" />
 				<label class="units">⌀</label>
 				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
@@ -324,10 +325,10 @@ let Demo = {
 				<JointModel v-bind="{...miter, ...currentUnit, ...currentLayout, device_ppi}"
 				v-on:angleChanged="miter.angle = $event" />
 			</div>
-		</CopeTubeUI>
+		</div>
 		<div id='template'>
 			<MiterTemplate v-bind="{...miter, ...currentUnit, ...currentLayout, device_ppi}" />
-		</div>
+		</CopeTubeUI>
 	</CopeTubeDemo>`.replace(/([^>])\s+([$<])/g,'$1$2')
 };
 
