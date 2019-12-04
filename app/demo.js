@@ -325,10 +325,10 @@ let Demo = {
 				<JointModel v-bind="{...miter, ...currentUnit, ...currentLayout, device_ppi}"
 				v-on:angleChanged="miter.angle = $event" />
 			</div>
-		</div>
+		</CopeTubeUI>
 		<div id='template'>
 			<MiterTemplate v-bind="{...miter, ...currentUnit, ...currentLayout, device_ppi}" />
-		</CopeTubeUI>
+		</div>
 	</CopeTubeDemo>`.replace(/([^>])\s+([$<])/g,'$1$2')
 };
 
