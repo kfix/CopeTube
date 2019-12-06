@@ -30,6 +30,7 @@ gh-pages: browser/$(REPO)/ dist/.git
 		git commit -m "Deploy to gh-pages"; \
 		git push origin gh-pages
 
+test test.chrome test.ff test.macpin: browser/$(REPO)/
 test: index.html
 	open $<
 test.chrome: index.html
