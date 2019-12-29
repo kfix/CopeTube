@@ -185,11 +185,13 @@ let Demo = {
 					case "mm":
 						this.miter.joinOD *= 25.4;
 						this.miter.cutOD *= 25.4;
+						this.miter.cutGauge *= 25.4;
 						this.miter.offset *= 25.4;
 						break;
 					case "in":
 						this.miter.joinOD /= 25.4;
 						this.miter.cutOD /= 25.4;
+						this.miter.cutGauge /= 25.4;
 						this.miter.offset /= 25.4;
 						break;
 				};
@@ -259,9 +261,11 @@ let Demo = {
 			// https://www.smashingmagazine.com/2017/08/creating-custom-inputs-vue-js/
 			const value = event.target.label;
 			this.$emit('input', value);
-			let len = (value.lenth > 4) ? 4 : value.length;
-			event.target.size = len;
-			event.target.style.width = `${len}ch`;
+			if (value) {
+				let len = (value.length > 4) ? 4 : value.length;
+				event.target.size = len;
+				event.target.style.width = `${len}ch`;
+			}
 		}
 	},
 	template: `
