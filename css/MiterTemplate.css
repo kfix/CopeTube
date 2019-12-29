@@ -45,7 +45,7 @@ svg.flipped text {
 .previewCope { stroke: black; vector-effect: non-scaling-stroke; stroke-width: 1px; }
 .previewAnglePull {
 	cursor: grab;
-	height: 100px;
+	height: 10px;
 	width: 100px;
 }
 .previewAnglePull[type=range]:focus {
@@ -54,6 +54,12 @@ svg.flipped text {
 }
 .previewAnglePull[type=range] {
 	-webkit-appearance: none;
+}
+
+.previewAnglePull[type=range]::-webkit-slider-thumb {
+  border: 1px solid #000000;
+  border-radius: 3px;
+  background: rgba(128, 255, 255, 0.1);
 }
 
 .previewGauge { stroke: black; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
