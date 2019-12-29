@@ -69,7 +69,6 @@ svg.flipped text {
 }
 
 .previewAnglePull[type=range]::-webkit-slider-runnable-track {
-	pointer-events: none;
 }
 
 .previewAnglePull[type=range]::-moz-range-thumb {
