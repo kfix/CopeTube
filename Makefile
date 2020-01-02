@@ -24,6 +24,9 @@ dist/.git:
 	git worktree add dist gh-pages
 
 gh-pages: browser/$(REPO)/ dist/.git
+	cd dist/; \
+		git fetch; \
+		git reset --hard origin/gh-pages
 	cp -RL $</* dist/
 	cd dist/; \
 		git add --all; \
