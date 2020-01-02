@@ -40,6 +40,7 @@ test.chrome: index.html
 	(open -a "Google Chrome.app" file://$(PWD)/$< --args '--disable-web-security' '--user-data-dir=' '--allow-file-access-from-files')
 test.ff: index.html
 	# security.fileuri.strict_origin_policy=false
+	(open -a "Firefox.app" file://$(PWD)/$< )
 test.macpin: index.html
 	(open -a MacPin.app --args -i file://$(PWD)/$<)
 test.app: $(REPO).app/Contents/MacOS/$(REPO)

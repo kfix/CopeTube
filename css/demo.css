@@ -59,3 +59,20 @@ select {
 	-webkit-appearance: none;
 	border: none;
 }
+
+:root { color-scheme: light dark; }
+
+/* firefox is confuse https://bugzilla.mozilla.org/show_bug.cgi?id=1529323 */
+/* https://webkit.org/blog/8840/dark-mode-support-in-webkit/ */
+
+@media (prefers-color-scheme: dark) { 
+	html, input, button, select {
+		color: white;
+	}
+	html {
+		background: black;
+	}
+	input, button, select {
+		background: transparent;
+	}
+}
