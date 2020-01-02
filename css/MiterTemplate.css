@@ -43,42 +43,27 @@ svg.flipped text {
 .previewCutTube { stroke: black; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
 .previewLabel { stroke: red; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
 .previewCope { stroke: black; vector-effect: non-scaling-stroke; stroke-width: 1px; }
-.previewGauge { stroke: black; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
-
 .previewAnglePull {
 	cursor: grab;
-	height: 10px;
-	width: 110px;
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: none;
-	background: transparent
+	height: 100px;
+	width: 100px;
 }
-
 .previewAnglePull[type=range]:focus {
 	outline: none;
 	cursor: grab;
 }
-.previewAnglePull[type=range]::-moz-focus-outer{ border: 0; }
-
 .previewAnglePull[type=range] {
 	-webkit-appearance: none;
-	-moz-appearance: none;
-	pointer-events: none;
 }
 
-.previewAnglePull[type=range]::-webkit-slider-runnable-track {
+.previewGauge { stroke: black; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
+
+.tile_strip {
+	font-size: 8pt;
 }
 
-.previewAnglePull[type=range]::-moz-range-thumb {
-	pointer-events: auto;
-	background: rgba(128, 255, 255, 0.1);
-}
-
-.previewAnglePull[type=range]::-webkit-slider-thumb {
-	pointer-events: auto;
-	background: rgba(128, 255, 255, 0.1);
-	border: 1px solid #000000;
-	border-radius: 3px;
+@media (prefers-dark-interface) {
+	.previewGauge { stroke: white; }
+	.tile_strip { stroke: magenta; }
+	.titles { fill: magenta; }
 }
