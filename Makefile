@@ -15,7 +15,7 @@ $(REPO).app: $(MacPin)/Makefile browser/$(REPO)/
 vue.js:
 	wget -O vue.js https://cdn.jsdelivr.net/npm/vue
 
-browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons vue.js
+browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons vue.js preload.js sw.js
 	install -d $@
 	for i in $+; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 	touch $@
