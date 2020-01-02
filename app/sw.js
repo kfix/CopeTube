@@ -2,17 +2,17 @@
 //
 var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
-	'/',
-	'/vue.js',
-	'/css/demo.css',
-	'/css/fonts.css',
-	'/css/print.css',
-	'/css/MiterTemplate.css',
-	'/app/demo.js',
-	'/lib/tubes.js',
-	'/lib/csscolors.js',
-	'/lib/MiterTemplate.js',
-	'/lib/JointModel.js',
+	'/CopeTube/',
+	'/CopeTube/vue.js',
+	'/CopeTube/css/demo.css',
+	'/CopeTube/css/fonts.css',
+	'/CopeTube/css/print.css',
+	'/CopeTube/css/MiterTemplate.css',
+	'/CopeTube/app/demo.js',
+	'/CopeTube/lib/tubes.js',
+	'/CopeTube/lib/csscolors.js',
+	'/CopeTube/lib/MiterTemplate.js',
+	'/CopeTube/lib/JointModel.js',
 ];
 
 self.addEventListener('install', function(event) {
