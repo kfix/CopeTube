@@ -300,8 +300,8 @@ let Demo = {
 					v-model.number="miter.cutGauge" title="gauge (wall thickness) of coped tube" />
 				<label class="units">{{unitSymbol}}</label>
 
-				<input class="sizeInput" type="number" inputmode="decimal" pattern="[0-9.]*"
-					min="0.0" v-bind:max="miter.cutOD" v-bind:step="currentUnit.stepping"
+				<input class="sizeInput" type="number" inputmode="decimal" pattern="[-0-9.]*"
+					v-bind:min="-miter.joinOD" v-bind:max="miter.joinOD" v-bind:step="currentUnit.stepping"
 					v-model.number="miter.offset" @input="formatSize" title="offset of tube centerlines" />
 				<label class="units">{{unitSymbol}}</label>
 
@@ -328,7 +328,7 @@ let Demo = {
 				<br />
 
 				<button onclick="window.print()" title="inline printer">🖨</button>
-				<button v-on:click="printTemplate()" title="pop-up printer">🖨</button>
+				<!-- <button v-on:click="printTemplate()" title="pop-up printer">🖨</button> -->
 				<select v-model="layout" title="choose paper size (red box shows its bounds)" @input="formatSize"> 
 					<option v-for="(value, name) in this.LAYOUTS" v-bind:value="name">{{name}}</option>
 				</select>
