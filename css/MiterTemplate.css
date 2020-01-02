@@ -62,7 +62,7 @@ svg.flipped text {
 	font-size: 8pt;
 }
 
-@media (prefers-dark-interface) {
+@media (prefers-color-scheme: dark) { 
 	.previewGauge { stroke: white; }
 	.tile_strip { stroke: magenta; }
 	.titles { fill: magenta; }

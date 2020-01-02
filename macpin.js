@@ -13,6 +13,7 @@ var copetubeDev = {
 	url: `file://${$.app.environment.HOME}/src/CopeTube/index.html`,
 	// <kCFErrorDomainCFNetwork error 1> cannot open symlinked file:// urls !
 	caching: false,
+	inspectorVisible: true,
 	useSystemAppearance: true
 };
 var copetubeWeb = {
