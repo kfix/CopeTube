@@ -363,7 +363,7 @@ function showDemo(el) {
 
 // Chrome requires a service worker to allow install as a desktop PWA
 if ('serviceWorker' in navigator) {
-	navigator.serviceWorker.register('./sw.js').then(function(reg) {
+	navigator.serviceWorker.register('./app/sw.js').then(function(reg) {
 	console.log('Successfully registered service worker', reg);
 }).catch(function(err) {
 	console.warn('Error whilst registering service worker', err);
