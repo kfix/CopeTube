@@ -9,6 +9,8 @@ var urlsToCache = [
 	'/CopeTube/css/fonts.css',
 	'/CopeTube/css/print.css',
 	'/CopeTube/css/MiterTemplate.css',
+	'/CopeTube/fonts/osifont-2014.ttf',
+	'/CopeTube/fonts/Y14.5M-2009.ttf',
 	'/CopeTube/app/demo.js',
 	'/CopeTube/lib/tubes.js',
 	'/CopeTube/lib/csscolors.js',
