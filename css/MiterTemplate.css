@@ -57,3 +57,13 @@ svg.flipped text {
 }
 
 .previewGauge { stroke: black; fill: none; vector-effect: non-scaling-stroke; stroke-width: 1px; }
+
+.tile_strip {
+	font-size: 8pt;
+}
+
+@media (prefers-dark-interface) {
+	.previewGauge { stroke: white; }
+	.tile_strip { stroke: magenta; }
+	.titles { fill: magenta; }
+}
