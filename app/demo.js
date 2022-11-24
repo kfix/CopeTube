@@ -1,3 +1,4 @@
+import Vue, { ref } from '../vue.js';
 import {colorToHex} from '../lib/csscolors.js';
 import JointModel from '../lib/JointModel.js';
 import MiterTemplate from '../lib/MiterTemplate.js';
@@ -36,6 +37,20 @@ let LAYOUTS = {
 			fromTop: 2.54
 		}
 	},
+	"credit-card": {
+		"in": {
+			width: 2.125,
+			height: 3.375,
+			fromLeft: 0.3,
+			fromTop: 0.1
+		},
+		"mm": {
+			width: 53.98,
+			height: 85.6,
+			fromLeft: 7.62,
+			fromTop: 2.54
+		}
+	},
 	"US-letter": {
 		"in": {
 			width: 8.5,
@@ -53,7 +68,6 @@ let LAYOUTS = {
 };
 
 // http://screensiz.es/
-// https://pixensity.com
 // https://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions
 let DEVICE_PPIS = new Map([
 	[96.00, [
@@ -70,6 +84,9 @@ let DEVICE_PPIS = new Map([
 	]],
 	[220.53, [
 		'MacBook Pro 15" Retina'
+	]],
+	[224.42, [
+		'MacBook Air M2 (2022)'
 	]],
 	[226.42, [
 		"MacBook 2015"
@@ -99,6 +116,9 @@ let DEVICE_PPIS = new Map([
 	[455.55, [
 		"iPhone XS Max",
 		"iPhone 11 Pro Max"
+	]],
+	[460.00, [
+		"iPhone 13"
 	]],
 	[462.63, [
 		"iPhone 6/6S/7/8 Plus", /* Pluses expose a fake 3x dppx then downsamples 13% to their real dpi (401) */
@@ -224,10 +244,10 @@ let Demo = {
 		// lockPointer()
 		// howTo()
 		getDevicePPI(size) {
-			// CSS unit sizes are hogwash
-			//  std-body is saying "cantfix-so-wontspec",
+			// CSS unit sizes for In & MM are hogwash
+			//  CSS' std-body is saying "cantfix-so-wontspec",
 			//  browsers are saying "notspec-so-wontfix"
-			//  gaaah!
+			//  gaaah! https://wiki.csswg.org/faq#real-physical-lengths
 			//
 			// https://github.com/w3c/csswg-drafts/issues/614#issuecomment-260620057
 			// https://lists.w3.org/Archives/Public/www-style/2012Feb/1042.html
