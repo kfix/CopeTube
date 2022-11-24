@@ -13,7 +13,7 @@ $(REPO).app: $(MacPin)/Makefile browser/$(REPO)/
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
 vue.js:
-	wget -O vue.js https://cdn.jsdelivr.net/npm/vue
+	wget -O vue.js https://unpkg.com/vue@2.7.14/dist/vue.esm.browser.min.js
 
 browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons vue.js preload.js sw.js
 	install -d $@

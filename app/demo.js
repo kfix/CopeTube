@@ -1,3 +1,4 @@
+import Vue, { ref } from '../vue.js';
 import {colorToHex} from '../lib/csscolors.js';
 import JointModel from '../lib/JointModel.js';
 import MiterTemplate from '../lib/MiterTemplate.js';
