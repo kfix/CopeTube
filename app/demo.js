@@ -54,7 +54,6 @@ let LAYOUTS = {
 };
 
 // http://screensiz.es/
-// https://pixensity.com
 // https://www.paintcodeapp.com/news/ultimate-guide-to-iphone-resolutions
 let DEVICE_PPIS = new Map([
 	[96.00, [
@@ -71,6 +70,9 @@ let DEVICE_PPIS = new Map([
 	]],
 	[220.53, [
 		'MacBook Pro 15" Retina'
+	]],
+	[224.42, [
+		'MacBook Air M2 (2022)'
 	]],
 	[226.42, [
 		"MacBook 2015"
@@ -100,6 +102,9 @@ let DEVICE_PPIS = new Map([
 	[455.55, [
 		"iPhone XS Max",
 		"iPhone 11 Pro Max"
+	]],
+	[460.00, [
+		"iPhone 13"
 	]],
 	[462.63, [
 		"iPhone 6/6S/7/8 Plus", /* Pluses expose a fake 3x dppx then downsamples 13% to their real dpi (401) */
