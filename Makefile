@@ -12,10 +12,7 @@ $(REPO).app: $(MacPin)/Makefile browser/$(REPO)/
 	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
 	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
 
-vue.js:
-	wget -O vue.js https://unpkg.com/vue@2.7.14/dist/vue.esm.browser.min.js
-
-browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons vue.js preload.js sw.js
+browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons preload.js sw.js
 	install -d $@
 	for i in $+; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
 	touch $@
@@ -33,13 +30,20 @@ gh-pages: browser/$(REPO)/ dist/.git
 		git commit -m "Deploy to gh-pages"; \
 		git push origin gh-pages
 
+node_modules: package.json
+	npm install
+	touch $@
+
+run-dev: node_modules
+	npm run dev -- --open
+
 test test.chrome test.ff test.macpin: browser/$(REPO)/
 test: index.html
 	open $<
 test.chrome: index.html
 	(open -a "Google Chrome.app" file://$(PWD)/$< --args '--disable-web-security' '--user-data-dir=' '--allow-file-access-from-files')
 test.ff: index.html
-	# security.fileuri.strict_origin_policy=false
+	# about:config -> security.fileuri.strict_origin_policy=false
 	(open -a "Firefox.app" file://$(PWD)/$< )
 test.macpin: index.html
 	(open -a MacPin.app --args -i file://$(PWD)/$<)
@@ -72,4 +76,4 @@ release:
 endif
 
 .PRECIOUS: build/%
-.PHONY: clean all test test.app test.chrome gh-pages
+.PHONY: clean all run-dev test test.app test.chrome gh-pages
