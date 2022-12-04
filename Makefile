@@ -10,13 +10,15 @@ dist dist/index.html: index.html src/** public/**
 	npx vite build
 	touch $@
 
-dist/.git:
-	git worktree add dist gh-pages
+gh-pages-dist/.git:
+	git worktree add gh-pages-dist gh-pages
 
-gh-pages: dist/.git
-	cd dist/; \
+gh-pages: gh-pages-dist/.git
+	cd gh-pages-dist/; \
 		git fetch; \
 		git reset --hard origin/gh-pages; \
+		git rm -r ./*;\
+		cp -a ../dist/* .; \
 		git add --all; \
 		git commit -m "Deploy to gh-pages"; \
 		git push origin gh-pages
