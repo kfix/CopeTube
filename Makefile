@@ -6,7 +6,7 @@ REPO		 := CopeTube
 ZIP			 := $(REPO).zip
 GH_RELEASE_JSON = '{"tag_name": "v$(VERSION)","target_commitish": "master","name": "v$(VERSION)","body": "$(REPO) build of version $(VERSION)","draft": false,"prerelease": true}'
 
-dist dist/index.html: index.html src/lib/*.js src/lib/*.svelte src/*.svelte
+dist dist/index.html: index.html src/** public/**
 	npx vite build
 	touch $@
 
@@ -68,4 +68,4 @@ release:
 endif
 
 .PRECIOUS: build/%
-.PHONY: clean all run-dev test test.app test.chrome test.edge gh-pages
+.PHONY: clean run-dev test test.app test.chrome test.edge gh-pages
