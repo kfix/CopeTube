@@ -5,27 +5,18 @@ USER		 := kfix
 REPO		 := CopeTube
 ZIP			 := $(REPO).zip
 GH_RELEASE_JSON = '{"tag_name": "v$(VERSION)","target_commitish": "master","name": "v$(VERSION)","body": "$(REPO) build of version $(VERSION)","draft": false,"prerelease": true}'
-MacPin		?= ${HOME}/src/MacPin
 
-all: $(REPO).app
-$(REPO).app: $(MacPin)/Makefile browser/$(REPO)/
-	$(MAKE) -C $(MacPin) macpin_sites=$(PWD)/browser appdir=$(PWD) icondir=$(PWD) appsig='' $(PWD)/$@
-	plutil -replace MacPin-AppScriptName -string "macpin" $@/Contents/Info.plist
-
-browser/%/: macpin.js index.html pwa_manifest.json css fonts app lib icons preload.js sw.js
-	install -d $@
-	for i in $+; do [ ! -e $$i ] || ln -sf ../../$$i $@/; done
+dist dist/index.html: index.html src/lib/*.js src/lib/*.svelte src/*.svelte
+	npx vite build
 	touch $@
 
 dist/.git:
 	git worktree add dist gh-pages
 
-gh-pages: browser/$(REPO)/ dist/.git
+gh-pages: dist/.git
 	cd dist/; \
 		git fetch; \
-		git reset --hard origin/gh-pages
-	cp -RL $</* dist/
-	cd dist/; \
+		git reset --hard origin/gh-pages; \
 		git add --all; \
 		git commit -m "Deploy to gh-pages"; \
 		git push origin gh-pages
@@ -37,15 +28,16 @@ node_modules: package.json
 run-dev: node_modules
 	npm run dev -- --open
 
-test test.chrome test.ff test.macpin: browser/$(REPO)/
-test: index.html
+test: dist/index.html
 	open $<
-test.chrome: index.html
+test.chrome: dist/index.html
 	(open -a "Google Chrome.app" file://$(PWD)/$< --args '--disable-web-security' '--user-data-dir=' '--allow-file-access-from-files')
-test.ff: index.html
+test.edge: dist/index.html
+	(open -a "Microsoft Edge.app" file://$(PWD)/$< --args '--disable-web-security' '--user-data-dir=' '--allow-file-access-from-files')
+test.ff: dist/index.html
 	# about:config -> security.fileuri.strict_origin_policy=false
 	(open -a "Firefox.app" file://$(PWD)/$< )
-test.macpin: index.html
+test.macpin: dist/index.html
 	(open -a MacPin.app --args -i file://$(PWD)/$<)
 test.app: $(REPO).app/Contents/MacOS/$(REPO)
 	($^ -i)
@@ -76,4 +68,4 @@ release:
 endif
 
 .PRECIOUS: build/%
-.PHONY: clean all run-dev test test.app test.chrome gh-pages
+.PHONY: clean all run-dev test test.app test.chrome test.edge gh-pages
