@@ -1,0 +1,23 @@
+@media not print {
+	body {
+		height: 100%;
+		width: 100%;
+		overflow: hidden;
+		overflow-x: hidden;
+		position: fixed;
+	}
+}
+
+:root { color-scheme: light dark; }
+
+/* firefox is confuse https://bugzilla.mozilla.org/show_bug.cgi?id=1529323 */
+/* https://webkit.org/blog/8840/dark-mode-support-in-webkit/ */
+
+@media (prefers-color-scheme: dark) { 
+	html {
+		color: white;
+	}
+	html {
+		background: black;
+	}
+}

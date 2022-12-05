@@ -3,8 +3,6 @@ Interactively design precise tube-notching [templates](http://www.eaavideo.org/v
 
 [Click to run it in your browser...](http://kfix.github.io/CopeTube)  
 
-[or download](/releases/latest) the [MacPin](http://github.com/kfix/MacPin) OSX app for offline use.
-
 Tube notching is commonly performed in steel bicycle, aircraft, roll-cage, and handrail fabrication.  
 
 CopeTube's templates make it easier to cut fish-mouthed tubing junctions by hand instead of using bulky and expensive metal-notching machines.
@@ -34,11 +32,15 @@ N-many-tube & non-round-tubing templating not yet supported.
 ![excerpt](/french_cylinders.png?raw=true)
 
 ## Hacking
-Uses [Vue.js](https://vuejs.org/) framework for pseudo-reactiveness  
-TODO:  
-* try [Svelte](https://svelte.dev) compiler [(??)](https://gist.github.com/Rich-Harris/0f910048478c2a6505d1c32185b61934) for faster reactiveness
-* make modeling components [Observable](https://github.com/observablehq) so we can run full bike-build worksheets
-* take cues from [JS.Sketcher](https://github.com/xibyte/jsketcher) for a studio app?
+* Uses [Svelte](https://svelte.dev) compiler for UI reactiveness
+* Uses [vite](https://vitejs.dev) for webpacking and dev (`make run-dev`)
+
+## Ideas for future
+* make modeling components finer grained so they can be used as instanciated within cells of an [Observable](https://github.com/observablehq) [Notebook](https://github.com/gzuidhof/starboard-notebook)
+  * would allow an ad-hoc means of persisting and tweaking full build worksheets of (bikes or other tubed things)
+* 3d joint-modeling component for a richer preview?
+* GUI for laying out a [basic "Nine Tubes" road bike frame](https://github.com/occamsshavingkit/Bike-Draw)
+  * take cues from [JS.Sketcher](https://github.com/xibyte/jsketcher) for the UX?
 
 [Icon](http://www.clker.com/clipart-pipe.html) by Johnna Scott.
 

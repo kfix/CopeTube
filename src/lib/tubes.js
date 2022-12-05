@@ -315,7 +315,7 @@ export class JointPlot {
 		if (this.vflip) {
 			origin[1] = this.height;
 		}
-		
+
 		if (this.hflip) {
 			origin[0] = this.width;
 		}
