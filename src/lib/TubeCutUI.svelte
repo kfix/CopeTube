@@ -1,7 +1,7 @@
 <script>
-    import JointModel from './JointModel.svelte';
-    import MiterTemplate from './MiterTemplate.svelte';
-    import {colorToHex} from './csscolors.js';
+	import JointModel from './JointModel.svelte';
+	import MiterTemplate from './MiterTemplate.svelte';
+	import {colorToHex} from './csscolors.js';
 	import * as disps from './display_constants.js';
 
 	function narrowPPIs() {
@@ -42,7 +42,7 @@
 	}
 
 	let device_ppis = Array.from(narrowPPIs());
-    let miter = {
+	let miter = {
 		angle: 17,
 		cutOD: 1,
 		cutGauge: 0.0,
@@ -59,7 +59,7 @@
 	let units = "in";
 	let layout = 'dymo-1x3.5"';
 	$: currentUnit = disps.UNITS[units];
-    $: currentLayout = disps.LAYOUTS[layout][units];
+	$: currentLayout = disps.LAYOUTS[layout][units];
 	$: unitSymbol = disps.UNITS[units].unitSymbol; // does this pass to sub-components' props?
 
 	function printTemplate(ev) {
